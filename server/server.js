@@ -39,8 +39,8 @@ app.post("/image", async (req, res) => {
   // Generate image from prompt
   const response = await openai.createImage({
     prompt: prompt,
-    n: 4,
-    size: "512x512",
+    n: 3,
+    size: "256x256",
   })
   // Send back image url
   console.log(response.data.data)

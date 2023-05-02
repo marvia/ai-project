@@ -131,6 +131,7 @@ export function BrandIntroVariant() {
     mission: string
     vision: string
     values: string
+    product: string
     slogans: string[]
   }
 
@@ -150,10 +151,12 @@ export function BrandIntroVariant() {
     mission: "",
     vision: "",
     values: "",
+    product: "",
     slogans: [""],
   })
   const [response2, setResponse2] = useState<Response2>([{ url: "" }])
   const [loading, setLoading] = useState(false)
+  const [imageLoaded, setImageLoaded] = useState(false)
   const { classes } = useStyles()
 
   const question =
@@ -166,9 +169,10 @@ export function BrandIntroVariant() {
     - a mission in 20 words or less\
     - a vision 10 words or less\
     - 3 brand values\
+    - answer the question: what product or products does the brand sell?\
      based on the text an array of 6 brand slogans based on the brand introduction. \
     the brand slogans should be unique and should motivate the reader to buy the product. \
-    keys: brand_story,who_we_are,promise,mission,vision,values, slogans."
+    keys: brand_story,who_we_are,promise,mission,vision,values,product, slogans."
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -179,24 +183,29 @@ export function BrandIntroVariant() {
       mission: "",
       vision: "",
       values: "",
+      product: "",
       slogans: [""],
     })
     setResponse2([{ url: "" }])
     const varPrompt = "```" + inputValue + "```"
     setLoading(true)
-    axios.post("http://localhost:8080/chat", { prompt: question + varPrompt }).then((res) => {
-      setLoading(false)
+    await axios.post("http://localhost:8080/chat", { prompt: question + varPrompt }).then((res) => {
       setResponse1(res.data)
-      genereRateImage()
     })
+
+    setLoading(false)
   }
 
-  const genereRateImage = async () => {
+  // useeffect to get image when response1 is in
+
+  useEffect(() => {
+    if (!response1.who_we_are) return
+    setResponse2([{ url: "" }])
     axios.post("http://localhost:8080/image", { prompt: response1.who_we_are }).then((res) => {
-      setLoading(false)
       setResponse2(res.data)
+      setImageLoaded(true)
     })
-  }
+  }, [response1])
 
   const child = <Skeleton height={140} radius="md" animate={true} />
 
@@ -233,12 +242,17 @@ export function BrandIntroVariant() {
             {loading && (
               <Grid>
                 <Grid.Col xs={4}>{child}</Grid.Col>
-                <Stack>
-                  {" "}
-                  <Grid.Col xs={8}>{child}</Grid.Col>
-                  <Grid.Col xs={8}>{child}</Grid.Col>
-                </Stack>
 
+                <Grid.Col xs={8}>
+                  <Stack>
+                    {child}
+                    {child}
+                  </Stack>
+                </Grid.Col>
+                <Grid.Col xs={4}></Grid.Col>
+
+                <Grid.Col xs={4}>{child}</Grid.Col>
+                <Grid.Col xs={4}>{child}</Grid.Col>
                 <Grid.Col xs={4}>{child}</Grid.Col>
                 <Grid.Col xs={4}>{child}</Grid.Col>
                 <Grid.Col xs={4}>{child}</Grid.Col>
@@ -248,7 +262,6 @@ export function BrandIntroVariant() {
             {response1.brand_story && (
               <Grid>
                 <Grid.Col xs={4}>
-                  {" "}
                   <Card shadow="sm" padding="xl" component="a" target="_blank">
                     <Text weight={500} size="lg" mt="md">
                       Brand story
@@ -320,7 +333,7 @@ export function BrandIntroVariant() {
                   </Card>
                 </Grid.Col>
                 <Grid.Col xs={4}> </Grid.Col>
-                <Grid.Col xs={8}>
+                <Grid.Col xs={4}>
                   <Card shadow="sm" padding="xl" component="a" target="_blank">
                     <Text weight={500} size="lg" mt="md">
                       values
@@ -331,28 +344,40 @@ export function BrandIntroVariant() {
                     </Text>
                   </Card>
                 </Grid.Col>
+                <Grid.Col xs={4}>
+                  <Card shadow="sm" padding="xl" component="a" target="_blank">
+                    <Text weight={500} size="lg" mt="md">
+                      Product
+                    </Text>
+
+                    <Text mt="xs" color="dimmed" size="sm">
+                      {response1.product}
+                    </Text>
+                  </Card>
+                </Grid.Col>
               </Grid>
             )}
           </Container>
         </div>
 
         {/* response2 is an array with objects containing url: imageUrl  loop through the array and show the separate images*/}
-
-        <div>
-          <Container my="md">
-            {response2.length > 0 && (
-              <Grid>
-                {response2.map((item, index) => (
-                  <Grid.Col xs={6}>
-                    <Card shadow="sm" padding="xl" component="a" target="_blank">
-                      <img src={item.url} />
-                    </Card>
-                  </Grid.Col>
-                ))}
-              </Grid>
-            )}
-          </Container>
-        </div>
+        {imageLoaded && (
+          <div>
+            <Container my="md">
+              {response2.length > 0 && (
+                <Grid>
+                  {response2.map((item, index) => (
+                    <Grid.Col xs={4}>
+                      <Card shadow="sm" padding="xl" component="a" target="_blank">
+                        <img src={item.url} />
+                      </Card>
+                    </Grid.Col>
+                  ))}
+                </Grid>
+              )}
+            </Container>
+          </div>
+        )}
       </Paper>
     </Fragment>
   )
