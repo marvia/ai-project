@@ -1,11 +1,14 @@
 const express = require("express")
 const cors = require("cors")
 const bodyParser = require("body-parser")
+const dotenv = require("dotenv").config({ path: "../.env" })
 
 const { Configuration, OpenAIApi } = require("openai")
 
+const apiKey = process.env.OPENAI_API_KEY
+
 const configuration = new Configuration({
-  apiKey: "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",
+  apiKey: apiKey,
 })
 const openai = new OpenAIApi(configuration)
 
@@ -23,8 +26,9 @@ app.post("/chat", async (req, res) => {
   const completion = await openai.createCompletion({
     model: "text-davinci-003",
     prompt: prompt,
-    max_tokens: 450,
+    max_tokens: 1000,
   })
+  console.log(completion.data)
   res.send(completion.data.choices[0].text)
 })
 
@@ -35,10 +39,11 @@ app.post("/image", async (req, res) => {
   // Generate image from prompt
   const response = await openai.createImage({
     prompt: prompt,
-    n: 3,
+    n: 4,
     size: "512x512",
   })
   // Send back image url
+  console.log(response.data.data)
   res.send(response.data.data)
 })
 

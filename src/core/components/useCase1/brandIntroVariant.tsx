@@ -1,4 +1,18 @@
-import { Paper, Text, Textarea, Button, Group, createStyles, rem, Divider } from "@mantine/core"
+import {
+  Paper,
+  Text,
+  Textarea,
+  Button,
+  Group,
+  createStyles,
+  rem,
+  Divider,
+  Skeleton,
+  Container,
+  Grid,
+  Card,
+  Stack,
+} from "@mantine/core"
 import { Fragment, useEffect, useRef, useState } from "react"
 import bg from "../bg.svg"
 import viaMarBG from "../viamar.jpg"
@@ -61,15 +75,11 @@ const useStyles = createStyles((theme) => {
     },
 
     contacts: {
-      boxSizing: "border-box",
-      position: "relative",
       borderRadius: theme.radius.lg,
       backgroundImage: `url(${bg.src})`,
       backgroundSize: "cover",
       backgroundPosition: "center",
       border: `${rem(1)} solid transparent`,
-      padding: theme.spacing.xl,
-      flex: `0 0 ${rem(600)}`,
 
       [BREAKPOINT]: {
         marginBottom: theme.spacing.sm,
@@ -115,66 +125,85 @@ const useStyles = createStyles((theme) => {
 
 export function BrandIntroVariant() {
   interface Response1 {
-    brand_intro: string
+    brand_story: string
+    who_we_are: string
+    promise: string
+    mission: string
+    vision: string
+    values: string
     slogans: string[]
   }
+
+  interface Response2Object {
+    url: string
+  }
+
+  interface Response2 extends Array<Response2Object> {}
 
   const [inputValue, setInputValue] = useState("")
   const firstButtonText =
     "We are ViaMar a sustainable coffee brand that is committed to the environment."
-  const [response1, setResponse1] = useState<Response1>({ brand_intro: "", slogans: [] })
-  const [response2, setResponse2] = useState("")
+  const [response1, setResponse1] = useState<Response1>({
+    brand_story: "",
+    who_we_are: "",
+    promise: "",
+    mission: "",
+    vision: "",
+    values: "",
+    slogans: [""],
+  })
+  const [response2, setResponse2] = useState<Response2>([{ url: "" }])
   const [loading, setLoading] = useState(false)
   const { classes } = useStyles()
-
-  console.log(response1)
-  console.log(response2)
 
   const question =
     "Perform the following actions \
     - read the text delimited by triple backticks\
-    - output a json object that contains an enticing brand introduction based on the text you red and an array of 6 brand slogans based on the brand introduction. \
+    - output a json object that contains the following keys and values\
+    - a brand story with a minimum of 25 words\
+    - a who we are with a minimum of 20 words\
+    - a promise in more than 10 words\
+    - a mission in 20 words or less\
+    - a vision 10 words or less\
+    - 3 brand values\
+     based on the text an array of 6 brand slogans based on the brand introduction. \
     the brand slogans should be unique and should motivate the reader to buy the product. \
-    keys: brand_intro, slogans."
+    keys: brand_story,who_we_are,promise,mission,vision,values, slogans."
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    setResponse1({
+      brand_story: "",
+      who_we_are: "",
+      promise: "",
+      mission: "",
+      vision: "",
+      values: "",
+      slogans: [""],
+    })
+    setResponse2([{ url: "" }])
     const varPrompt = "```" + inputValue + "```"
     setLoading(true)
     axios.post("http://localhost:8080/chat", { prompt: question + varPrompt }).then((res) => {
       setLoading(false)
       setResponse1(res.data)
+      genereRateImage()
     })
   }
 
-  const genereRateImage = async (e) => {
-    const brandTags = response1.slogans.join(" ")
-    e.preventDefault()
-
-    axios.post("http://localhost:8080/image", { prompt: response1.brand_intro }).then((res) => {
+  const genereRateImage = async () => {
+    axios.post("http://localhost:8080/image", { prompt: response1.who_we_are }).then((res) => {
       setLoading(false)
       setResponse2(res.data)
     })
   }
 
-  console.log(response2)
+  const child = <Skeleton height={140} radius="md" animate={true} />
 
   return (
     <Fragment>
       <Paper shadow="md" radius="lg">
         <div className={classes.wrapper}>
-          <div className={classes.contacts}>
-            <Text fz="lg" fw={700} className={classes.title} c="#fff">
-              Brand intro variant
-            </Text>
-
-            <Divider />
-
-            <Text fz="sm" className={classes.title} c="#fff">
-              {response1.brand_intro}
-            </Text>
-          </div>
-
           <form className={classes.form} onSubmit={handleSubmit}>
             <Text fz="lg" fw={700} className={classes.title}></Text>
 
@@ -183,7 +212,7 @@ export function BrandIntroVariant() {
                 mt="md"
                 label="Your current brand introduction"
                 placeholder=""
-                minRows={10}
+                minRows={5}
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
               />
@@ -199,30 +228,131 @@ export function BrandIntroVariant() {
             </div>
           </form>
         </div>
-      </Paper>
-      <Divider mb={50} />
-      <Paper>
-        <Group>
-          {response1.slogans.map((slogan, index) => {
-            return (
-              <div key={index} className={classes.slogans}>
-                <div className={classes.graffiti}>
-                  <Text>{slogan}</Text>
-                </div>{" "}
-              </div>
-            )
-          })}
-        </Group>
-      </Paper>
+        <div>
+          <Container my="md">
+            {loading && (
+              <Grid>
+                <Grid.Col xs={4}>{child}</Grid.Col>
+                <Stack>
+                  {" "}
+                  <Grid.Col xs={8}>{child}</Grid.Col>
+                  <Grid.Col xs={8}>{child}</Grid.Col>
+                </Stack>
 
-      <Paper>
-        <Button onClick={genereRateImage}> Generate Image </Button>
-        {response2 && (
-          <div>
-            {" "}
-            <img src={response2} alt="" />
-          </div>
-        )}
+                <Grid.Col xs={4}>{child}</Grid.Col>
+                <Grid.Col xs={4}>{child}</Grid.Col>
+                <Grid.Col xs={4}>{child}</Grid.Col>
+              </Grid>
+            )}
+
+            {response1.brand_story && (
+              <Grid>
+                <Grid.Col xs={4}>
+                  {" "}
+                  <Card shadow="sm" padding="xl" component="a" target="_blank">
+                    <Text weight={500} size="lg" mt="md">
+                      Brand story
+                    </Text>
+
+                    <Text mt="xs" color="dimmed" size="sm">
+                      {response1.brand_story}
+                    </Text>
+                  </Card>
+                </Grid.Col>
+                <Grid.Col xs={8}>
+                  <Stack>
+                    {" "}
+                    <Card shadow="sm" padding="xl" component="a" target="_blank">
+                      <Card.Section></Card.Section>
+
+                      <Text weight={500} size="lg" mt="md">
+                        Who we are
+                      </Text>
+
+                      <Text mt="xs" color="dimmed" size="sm">
+                        {response1.who_we_are}
+                      </Text>
+                    </Card>
+                    <Card shadow="sm" padding="xl" component="a" target="_blank">
+                      <Text weight={500} size="lg" mt="md">
+                        Our promise
+                      </Text>
+
+                      <Text mt="xs" color="dimmed" size="sm">
+                        {response1.promise}
+                      </Text>
+                    </Card>
+                  </Stack>
+                </Grid.Col>
+                <Grid.Col xs={4}></Grid.Col>
+                <Grid.Col xs={4}>
+                  <Card
+                    style={{ minHeight: "220px" }}
+                    shadow="sm"
+                    padding="xl"
+                    component="a"
+                    target="_blank"
+                  >
+                    <Text weight={500} size="lg" mt="md">
+                      Mission
+                    </Text>
+
+                    <Text mt="xs" color="dimmed" size="sm">
+                      {response1.mission}
+                    </Text>
+                  </Card>
+                </Grid.Col>
+                <Grid.Col xs={4}>
+                  <Card
+                    style={{ minHeight: "220px" }}
+                    shadow="sm"
+                    padding="xl"
+                    component="a"
+                    target="_blank"
+                  >
+                    <Text weight={500} size="lg" mt="md">
+                      Vision
+                    </Text>
+
+                    <Text mt="xs" color="dimmed" size="sm">
+                      {response1.vision}
+                    </Text>
+                  </Card>
+                </Grid.Col>
+                <Grid.Col xs={4}> </Grid.Col>
+                <Grid.Col xs={8}>
+                  <Card shadow="sm" padding="xl" component="a" target="_blank">
+                    <Text weight={500} size="lg" mt="md">
+                      values
+                    </Text>
+
+                    <Text mt="xs" color="dimmed" size="sm">
+                      {response1.values}
+                    </Text>
+                  </Card>
+                </Grid.Col>
+              </Grid>
+            )}
+          </Container>
+        </div>
+
+        {/* response2 is an array with objects containing url: imageUrl  loop through the array and show the separate images*/}
+
+        <div>
+          <Container my="md">
+            {response2.length > 0 && (
+              <Grid>
+                {response2.map((item, index) => (
+                  <Grid.Col xs={6}>
+                    <Card shadow="sm" padding="xl" component="a" target="_blank">
+                      <img src={item.url} />
+                    </Card>
+                  </Grid.Col>
+                ))}
+              </Grid>
+            )}
+          </Container>
+        </div>
       </Paper>
     </Fragment>
   )
