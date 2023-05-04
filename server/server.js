@@ -23,13 +23,15 @@ app.post("/chat", async (req, res) => {
   const { prompt } = req.body
 
   // Generate a response with ChatGPT
-  const completion = await openai.createCompletion({
-    model: "text-davinci-003",
-    prompt: prompt,
+  const messages = [{ role: "user", content: prompt }]
+  const completion = await openai.createChatCompletion({
+    model: "gpt-3.5-turbo",
+    messages: messages,
+    temperature: 0,
     max_tokens: 1000,
   })
   console.log(completion.data)
-  res.send(completion.data.choices[0].text)
+  res.send(completion.data.choices[0].message.content)
 })
 
 app.post("/image", async (req, res) => {
