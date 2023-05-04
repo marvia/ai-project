@@ -157,7 +157,7 @@ export function BrandIntroVariant() {
   const [response2, setResponse2] = useState<Response2>([{ url: "" }])
   const [loading, setLoading] = useState(false)
   const [imageLoaded, setImageLoaded] = useState(false)
-  const { classes } = useStyles()
+  const { classes, theme } = useStyles()
 
   const question =
     "Perform the following actions \
@@ -170,9 +170,12 @@ export function BrandIntroVariant() {
     - a vision 10 words or less\
     - 3 brand values\
     - answer the question: what product or products does the brand sell?\
-     based on the text an array of 6 brand slogans based on the brand introduction. \
+    - based on the text include an array of 6 brand slogans based on the brand introduction. \
     the brand slogans should be unique and should motivate the reader to buy the product. \
-    keys: brand_story,who_we_are,promise,mission,vision,values,product, slogans."
+    - the json object should adhere to the following keys\
+     keys: brand_story,who_we_are,promise,mission,vision,values,product, slogans.\
+     - your output may only contain the json object and nothing else.\
+    - your output should be valid json."
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -271,6 +274,22 @@ export function BrandIntroVariant() {
                       {response1.brand_story}
                     </Text>
                   </Card>
+                  <Stack>
+                    {response1.slogans.map((slogan, index) => (
+                      <Card
+                        key={index}
+                        style={{ backgroundColor: theme.colors.blue[index] }}
+                        shadow="sm"
+                        padding="xl"
+                        component="a"
+                        target="_blank"
+                      >
+                        <Text weight={500} size="lg" mt="md">
+                          {slogan}
+                        </Text>
+                      </Card>
+                    ))}
+                  </Stack>
                 </Grid.Col>
                 <Grid.Col xs={8}>
                   <Stack>
@@ -295,65 +314,43 @@ export function BrandIntroVariant() {
                         {response1.promise}
                       </Text>
                     </Card>
+                    <Card shadow="sm" padding="xl" component="a" target="_blank">
+                      <Text weight={500} size="lg" mt="md">
+                        Mission
+                      </Text>
+
+                      <Text mt="xs" color="dimmed" size="sm">
+                        {response1.mission}
+                      </Text>
+                    </Card>
+                    <Card shadow="sm" padding="xl" component="a" target="_blank">
+                      <Text weight={500} size="lg" mt="md">
+                        Vision
+                      </Text>
+
+                      <Text mt="xs" color="dimmed" size="sm">
+                        {response1.vision}
+                      </Text>
+                    </Card>
+                    <Card shadow="sm" padding="xl" component="a" target="_blank">
+                      <Text weight={500} size="lg" mt="md">
+                        values
+                      </Text>
+
+                      <Text mt="xs" color="dimmed" size="sm">
+                        {response1.values}
+                      </Text>
+                    </Card>
+                    <Card shadow="sm" padding="xl" component="a" target="_blank">
+                      <Text weight={500} size="lg" mt="md">
+                        Product
+                      </Text>
+
+                      <Text mt="xs" color="dimmed" size="sm">
+                        {response1.product}
+                      </Text>
+                    </Card>
                   </Stack>
-                </Grid.Col>
-                <Grid.Col xs={4}></Grid.Col>
-                <Grid.Col xs={4}>
-                  <Card
-                    style={{ minHeight: "220px" }}
-                    shadow="sm"
-                    padding="xl"
-                    component="a"
-                    target="_blank"
-                  >
-                    <Text weight={500} size="lg" mt="md">
-                      Mission
-                    </Text>
-
-                    <Text mt="xs" color="dimmed" size="sm">
-                      {response1.mission}
-                    </Text>
-                  </Card>
-                </Grid.Col>
-                <Grid.Col xs={4}>
-                  <Card
-                    style={{ minHeight: "220px" }}
-                    shadow="sm"
-                    padding="xl"
-                    component="a"
-                    target="_blank"
-                  >
-                    <Text weight={500} size="lg" mt="md">
-                      Vision
-                    </Text>
-
-                    <Text mt="xs" color="dimmed" size="sm">
-                      {response1.vision}
-                    </Text>
-                  </Card>
-                </Grid.Col>
-                <Grid.Col xs={4}> </Grid.Col>
-                <Grid.Col xs={4}>
-                  <Card shadow="sm" padding="xl" component="a" target="_blank">
-                    <Text weight={500} size="lg" mt="md">
-                      values
-                    </Text>
-
-                    <Text mt="xs" color="dimmed" size="sm">
-                      {response1.values}
-                    </Text>
-                  </Card>
-                </Grid.Col>
-                <Grid.Col xs={4}>
-                  <Card shadow="sm" padding="xl" component="a" target="_blank">
-                    <Text weight={500} size="lg" mt="md">
-                      Product
-                    </Text>
-
-                    <Text mt="xs" color="dimmed" size="sm">
-                      {response1.product}
-                    </Text>
-                  </Card>
                 </Grid.Col>
               </Grid>
             )}
