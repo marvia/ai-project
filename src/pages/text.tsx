@@ -2,7 +2,7 @@ import { Fragment } from "react"
 import { BlitzPage } from "@blitzjs/next"
 import { TextControl } from "src/core/components/useCase2/textCheckVariant"
 
-const Home: BlitzPage = () => {
+const Text: BlitzPage = () => {
   return (
     <Fragment>
       <TextControl />
@@ -10,4 +10,4 @@ const Home: BlitzPage = () => {
   )
 }
 
-export default Home
+export default Text
