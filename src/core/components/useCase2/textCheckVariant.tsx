@@ -15,7 +15,6 @@ import {
 } from "@mantine/core"
 import { Fragment, useEffect, useRef, useState } from "react"
 import bg from "../bg.svg"
-import viaMarBG from "../viamar.jpg"
 import axios from "axios"
 
 const useStyles = createStyles((theme) => {
@@ -125,8 +124,6 @@ const useStyles = createStyles((theme) => {
 
 export function TextControl() {
   const [inputValue, setInputValue] = useState("")
-  const firstButtonText =
-    "We are ViaMar a sustainable coffee brand that is committed to the environment."
   const [response1, setResponse1] = useState("")
   const [loading, setLoading] = useState(false)
   const [imageLoaded, setImageLoaded] = useState(false)
@@ -177,9 +174,6 @@ export function TextControl() {
               <Group position="right" mt="md">
                 <Button type="submit" className={classes.control} disabled={loading}>
                   Send message
-                </Button>
-                <Button disabled={loading} onClick={() => setInputValue(firstButtonText)}>
-                  {firstButtonText}
                 </Button>
               </Group>
             </div>
