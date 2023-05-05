@@ -70,6 +70,9 @@ dependencies:
   "@tiptap/starter-kit":
     specifier: 2.0.3
     version: 2.0.3(@tiptap/pm@2.0.3)
+  axios:
+    specifier: 1.4.0
+    version: 1.4.0
   blitz:
     specifier: 2.0.0-beta.26
     version: 2.0.0-beta.26(@babel/preset-env@7.21.5)(@types/node@18.11.9)(@types/react@18.0.25)(react@18.2.0)(typescript@4.8.4)
@@ -5825,6 +5828,19 @@ packages:
       }
     dependencies:
       follow-redirects: 1.15.2
+    transitivePeerDependencies:
+      - debug
+    dev: false
+
+  /axios@1.4.0:
+    resolution:
+      {
+        integrity: sha512-S4XCWMEmzvo64T9GfvQDOXgYRDJ/wsSZc7Jvdgx5u1sd0JwsuPLqb3SYmusag+edF6ziyMensPVqLTSc1PiSEA==,
+      }
+    dependencies:
+      follow-redirects: 1.15.2
+      form-data: 4.0.0
+      proxy-from-env: 1.1.0
     transitivePeerDependencies:
       - debug
     dev: false
@@ -13130,6 +13146,13 @@ packages:
     dependencies:
       forwarded: 0.2.0
       ipaddr.js: 1.9.1
+    dev: false
+
+  /proxy-from-env@1.1.0:
+    resolution:
+      {
+        integrity: sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==,
+      }
     dev: false
 
   /psl@1.9.0:
