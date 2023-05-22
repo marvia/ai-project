@@ -192,9 +192,11 @@ export function BrandIntroVariant() {
     setResponse2([{ url: "" }])
     const varPrompt = "```" + inputValue + "```"
     setLoading(true)
-    await axios.post("http://localhost:8080/chat", { prompt: question + varPrompt }).then((res) => {
-      setResponse1(res.data)
-    })
+    await axios
+      .post("http://16.16.179.205:5001/chat", { prompt: question + varPrompt })
+      .then((res) => {
+        setResponse1(res.data)
+      })
 
     setLoading(false)
   }
@@ -204,7 +206,7 @@ export function BrandIntroVariant() {
   useEffect(() => {
     if (!response1.who_we_are) return
     setResponse2([{ url: "" }])
-    axios.post("http://localhost:8080/image", { prompt: response1.who_we_are }).then((res) => {
+    axios.post("http://16.16.179.205:5001/image", { prompt: response1.who_we_are }).then((res) => {
       setResponse2(res.data)
       setImageLoaded(true)
     })
