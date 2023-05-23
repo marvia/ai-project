@@ -1,4 +1,4 @@
-import { loadEnvConfig } from "@next/env"
+import { loadEnvConfig } from "@next/env/dist"
 import { defineConfig } from "vitest/config"
 
 import react from "@vitejs/plugin-react"
