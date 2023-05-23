@@ -17,6 +17,10 @@ const app = express()
 app.use(bodyParser.json())
 app.use(cors())
 
+app.get("/", (req, res) => {
+  res.send("Hello Marvian!")
+})
+
 // Set up the ChatGPT endpoint
 app.post("/chat", async (req, res) => {
   // Get the prompt from the request
@@ -24,12 +28,16 @@ app.post("/chat", async (req, res) => {
 
   // Generate a response with ChatGPT
   const messages = [{ role: "user", content: prompt }]
-  const completion = await openai.createChatCompletion({
-    model: "gpt-3.5-turbo",
-    messages: messages,
-    temperature: 0,
-    max_tokens: 1000,
-  })
+  const completion = await openai
+    .createChatCompletion({
+      model: "gpt-3.5-turbo",
+      messages: messages,
+      temperature: 0,
+      max_tokens: 1000,
+    })
+    .catch((err) => {
+      console.log(err)
+    })
   console.log(completion.data)
   res.send(completion.data.choices[0].message.content)
 })
