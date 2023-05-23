@@ -32,6 +32,10 @@ const CopyCreatorMuation = resolver.pipe(
       const result = await axios
         .post(url, { prompt: finalPrompt })
         .then((response: { data: string }) => response.data)
+        .catch((error) => {
+          console.error(error)
+          throw new Error("FAAAAIIL")
+        })
 
       return result
     } catch (e) {
