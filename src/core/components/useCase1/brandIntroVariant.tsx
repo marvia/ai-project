@@ -13,9 +13,8 @@ import {
   Card,
   Stack,
 } from "@mantine/core"
-import { Fragment, useEffect, useRef, useState } from "react"
+import { Fragment, useEffect, useState } from "react"
 import bg from "../bg.svg"
-import viaMarBG from "../viamar.jpg"
 import axios from "axios"
 import Image from "next/image"
 
