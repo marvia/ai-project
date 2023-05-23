@@ -193,7 +193,7 @@ export function BrandIntroVariant() {
     const varPrompt = "```" + inputValue + "```"
     setLoading(true)
     await axios
-      .post("http://13.53.134.133:5001/chat", { prompt: question + varPrompt })
+      .post("https://13.53.134.133:5001/chat", { prompt: question + varPrompt })
       .then((res) => {
         setResponse1(res.data)
       })
@@ -210,7 +210,7 @@ export function BrandIntroVariant() {
     if (!response1.who_we_are) return
     setResponse2([{ url: "" }])
     axios
-      .post("http://13.53.134.133:5001/image", { prompt: response1.who_we_are })
+      .post("https://13.53.134.133:5001/image", { prompt: response1.who_we_are })
       .then((res) => {
         setResponse2(res.data)
         setImageLoaded(true)
