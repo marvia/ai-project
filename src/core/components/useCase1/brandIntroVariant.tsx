@@ -17,6 +17,7 @@ import { Fragment, useEffect, useRef, useState } from "react"
 import bg from "../bg.svg"
 import viaMarBG from "../viamar.jpg"
 import axios from "axios"
+import Image from "next/image"
 
 const useStyles = createStyles((theme) => {
   const BREAKPOINT = theme.fn.smallerThan("sm")
@@ -215,6 +216,9 @@ export function BrandIntroVariant() {
         setResponse2(res.data)
         setImageLoaded(true)
       })
+      .catch(function (error) {
+        console.log(error)
+      })
   }, [response1])
 
   const child = <Skeleton height={140} radius="md" animate={true} />
@@ -371,9 +375,9 @@ export function BrandIntroVariant() {
               {response2.length > 0 && (
                 <Grid>
                   {response2.map((item, index) => (
-                    <Grid.Col xs={4}>
+                    <Grid.Col key={index} xs={4}>
                       <Card shadow="sm" padding="xl" component="a" target="_blank">
-                        <img src={item.url} />
+                        <Image alt="example" src={item.url} />
                       </Card>
                     </Grid.Col>
                   ))}
