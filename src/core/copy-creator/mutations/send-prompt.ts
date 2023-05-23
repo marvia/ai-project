@@ -27,7 +27,7 @@ const CopyCreatorMuation = resolver.pipe(
     console.log({ finalPrompt })
 
     try {
-      const url = "https://marvai-server.onrender.com/chat"
+      const url = "http://13.53.134.133:5001/chat"
 
       const result = await axios
         .post(url, { prompt: finalPrompt })
