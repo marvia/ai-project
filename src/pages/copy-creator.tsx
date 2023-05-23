@@ -15,12 +15,12 @@ import {
 import { useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { TARGET_AUDIENCES, TONE_OF_VOICE } from "src/core/copy-creator/constants"
-import CopyCreatorMuation from "src/core/copy-creator/mutations/send-prompt"
+import CopyCreatorMutation from "src/core/copy-creator/mutations/send-prompt"
 import { CopyCreatorInput } from "src/core/copy-creator/zod"
 import Layout from "src/core/layouts/Layout"
 
 function useCopyCreatorMutation() {
-  return useMutation(CopyCreatorMuation)
+  return useMutation(CopyCreatorMutation)
 }
 
 const lengtSelectData: Array<SelectItem> = [
@@ -94,6 +94,7 @@ function CopyCreator(): JSX.Element {
                     searchable
                     nothingFound="Nothing found"
                     classNames={{ root: classes.root }}
+                    disabled={isLoading}
                     error={fieldState.error && <span>{fieldState.error.message}</span>}
                   />
                 )}
@@ -110,6 +111,7 @@ function CopyCreator(): JSX.Element {
                     searchable
                     nothingFound="Nothing found"
                     classNames={{ root: classes.root }}
+                    disabled={isLoading}
                     error={fieldState.error && <span>{fieldState.error.message}</span>}
                   />
                 )}
@@ -124,6 +126,7 @@ function CopyCreator(): JSX.Element {
                     data={lengtSelectData}
                     label="Length of copy"
                     classNames={{ root: classes.root }}
+                    disabled={isLoading}
                     error={fieldState.error && <span>{fieldState.error.message}</span>}
                   />
                 )}
@@ -139,6 +142,7 @@ function CopyCreator(): JSX.Element {
                     placeholder="What do you want your audience to do?"
                     minRows={4}
                     classNames={{ root: classes.root }}
+                    disabled={isLoading}
                     error={fieldState.error && <span>{fieldState.error.message}</span>}
                   />
                 )}

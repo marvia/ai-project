@@ -3,31 +3,19 @@ import axios from "axios"
 import { DEFAULT_PROMPT } from "src/core/copy-creator/constants"
 import { CopyCreatorInput } from "src/core/copy-creator/zod"
 
-const CopyCreatorMuation = resolver.pipe(
+const CopyCreatorMutation = resolver.pipe(
   resolver.zod(CopyCreatorInput),
   async ({ toneOfVoice, targetAudiences, callToAction, copyLength }) => {
-    const finalPrompt =
-      DEFAULT_PROMPT +
-      "```" +
-      "Tone of voice: " +
-      toneOfVoice.join(", ") +
-      ".\n" +
-      "Target audience: " +
-      targetAudiences.join(", ") +
-      ".\n" +
-      "Length: " +
-      copyLength +
-      " words" +
-      ".\n" +
-      "Call to action: " +
-      callToAction +
-      ".\n" +
-      "```"
+    const finalPrompt = `${DEFAULT_PROMPT} \`\`\` Tone of voice: ${toneOfVoice.join(
+      ", "
+    )}. Target audience: ${targetAudiences.join(
+      ", "
+    )}. Length: ${copyLength} words. Call to action: ${callToAction} \`\`\``
 
     console.log({ finalPrompt })
 
     try {
-      const url = "https://marvai-server.onrender.com/chat"
+      const url = "http://13.53.134.133:5001/chat"
 
       const result = await axios
         .post(url, { prompt: finalPrompt })
@@ -41,4 +29,4 @@ const CopyCreatorMuation = resolver.pipe(
   }
 )
 
-export default CopyCreatorMuation
+export default CopyCreatorMutation
