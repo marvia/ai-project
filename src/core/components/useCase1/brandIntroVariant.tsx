@@ -193,9 +193,12 @@ export function BrandIntroVariant() {
     const varPrompt = "```" + inputValue + "```"
     setLoading(true)
     await axios
-      .post("http://16.16.179.205:5001/chat", { prompt: question + varPrompt })
+      .post("https://marvai-server.onrender.com/chat", { prompt: question + varPrompt })
       .then((res) => {
         setResponse1(res.data)
+      })
+      .catch(function (error) {
+        console.log(error)
       })
 
     setLoading(false)
@@ -206,10 +209,12 @@ export function BrandIntroVariant() {
   useEffect(() => {
     if (!response1.who_we_are) return
     setResponse2([{ url: "" }])
-    axios.post("http://16.16.179.205:5001/image", { prompt: response1.who_we_are }).then((res) => {
-      setResponse2(res.data)
-      setImageLoaded(true)
-    })
+    axios
+      .post("https://marvai-server.onrender.com/image", { prompt: response1.who_we_are })
+      .then((res) => {
+        setResponse2(res.data)
+        setImageLoaded(true)
+      })
   }, [response1])
 
   const child = <Skeleton height={140} radius="md" animate={true} />
