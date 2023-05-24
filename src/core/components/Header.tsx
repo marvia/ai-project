@@ -1,17 +1,15 @@
 import { useRouter } from "next/router"
-import { Flex, Header, Select, SelectItem, Title, createStyles } from "@mantine/core"
-import { useTranslations } from "next-intl"
+import { Flex, Header, Select, Title, createStyles, Group, SelectItem } from "@mantine/core"
 import Link from "next/link"
 
 const AppHeader: React.FC = () => {
   const router = useRouter()
   const { classes } = useStyles(undefined, { name: AppHeader.name })
   const { locale, locales } = router
-  const t = useTranslations("localeSwitcher")
 
-  const handleChangeLocale = (newLocale: string) => {
+  const handleChangeLocale = async (newLocale: string) => {
     const { pathname, query } = router
-    router.push({ pathname, query }, undefined, { locale: newLocale })
+    await router.push({ pathname, query }, undefined, { locale: newLocale })
   }
 
   const localeOptions: Array<SelectItem> =
@@ -20,6 +18,10 @@ const AppHeader: React.FC = () => {
   return (
     <Header height={150} classNames={{ root: classes.root }}>
       <Flex align="center" justify="center" direction="column">
+        <Group>
+          <Link href={"/"}>Brand inspirition</Link>
+          <Link href={"/copy-creator"}>Copy creator</Link>
+        </Group>
         <Title mb="lg">
           <Link href="/">MARVIA AI</Link>
         </Title>
