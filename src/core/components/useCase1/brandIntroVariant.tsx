@@ -17,6 +17,7 @@ import { Fragment, useEffect, useState } from "react"
 import bg from "../bg.svg"
 import axios from "axios"
 import Layout from "src/core/layouts/Layout"
+import { API_URL } from "src/pages/api/constants"
 
 const useStyles = createStyles((theme) => {
   const BREAKPOINT = theme.fn.smallerThan("sm")
@@ -193,7 +194,7 @@ export function BrandIntroVariant() {
     const varPrompt = "```" + inputValue + "```"
     setLoading(true)
     await axios
-      .post("https://ai-project-wine.vercel.app/api/chat", { prompt: question + varPrompt })
+      .post(API_URL, { prompt: question + varPrompt })
       .then((res) => {
         setResponse1(res.data)
       })
@@ -210,7 +211,7 @@ export function BrandIntroVariant() {
     if (!response1.who_we_are) return
     setResponse2([{ url: "" }])
     axios
-      .post("https://ai-project-wine.vercel.app/api/chat", { prompt: response1.who_we_are })
+      .post(API_URL, { prompt: response1.who_we_are })
       .then((res) => {
         setResponse2(res.data)
         setImageLoaded(true)

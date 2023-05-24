@@ -2,23 +2,25 @@ import { resolver } from "@blitzjs/rpc"
 import axios from "axios"
 import { DEFAULT_PROMPT } from "src/core/copy-creator/constants"
 import { CopyCreatorInput } from "src/core/copy-creator/zod"
+import { API_URL } from "src/pages/api/constants"
+import { AvailableLocalesZodEnum } from "src/types"
 
 const CopyCreatorMutation = resolver.pipe(
-  resolver.zod(CopyCreatorInput),
-  async ({ toneOfVoice, targetAudiences, callToAction, copyLength }) => {
+  resolver.zod(CopyCreatorInput.extend({ activeLocale: AvailableLocalesZodEnum })),
+  async ({ toneOfVoice, targetAudiences, callToAction, copyLength, activeLocale }) => {
     const finalPrompt = `${DEFAULT_PROMPT} \`\`\` Tone of voice: ${toneOfVoice.join(
       ", "
     )}. Target audience: ${targetAudiences.join(
       ", "
-    )}. Length: ${copyLength} words. Call to action: ${callToAction} \`\`\``
+    )}. Length: ${copyLength} words. Call to action: ${callToAction} \`\`\` ${
+      activeLocale === "nl" ? "Your reply should be in Dutch." : "Your reply should be in English."
+    }`
 
     console.log({ finalPrompt })
 
     try {
-      const url = "https://ai-project-wine.vercel.app/api/chat"
-
       return await axios
-        .post(url, { prompt: finalPrompt })
+        .post(API_URL, { prompt: finalPrompt })
         .then((response: { data: string }) => response.data)
         .catch((error) => {
           console.error(error)

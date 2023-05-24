@@ -15,12 +15,18 @@ import {
 import { useRouter } from "next/router"
 import { useState } from "react"
 import { Controller, useForm } from "react-hook-form"
-import { TARGET_AUDIENCES, TONE_OF_VOICE } from "src/core/copy-creator/constants"
+import {
+  TARGET_AUDIENCES,
+  TARGET_AUDIENCES_NL,
+  TONE_OF_VOICE,
+  TONE_OF_VOICE_NL,
+} from "src/core/copy-creator/constants"
 import CopyCreatorMutation from "src/core/copy-creator/mutations/send-prompt"
 import { CopyCreatorInput } from "src/core/copy-creator/zod"
 import Layout from "src/core/layouts/Layout"
 import { useTranslations } from "next-intl"
 import { GetStaticPropsContext } from "next"
+import { AvailableLocale } from "src/types"
 
 function useCopyCreatorMutation() {
   return useMutation(CopyCreatorMutation)
@@ -32,21 +38,12 @@ const lengtSelectData: Array<SelectItem> = [
   { label: "Long", value: "100 - 500" },
 ]
 
-const toneOfVoiceSelectData: Array<SelectItem> = TONE_OF_VOICE.sort().map((item) => ({
-  label: item,
-  value: item,
-}))
-const targetAudiencesSelectData: Array<SelectItem> = TARGET_AUDIENCES.sort().map((item) => ({
-  label: item,
-  value: item,
-}))
-
 function CopyCreator(): JSX.Element {
   const [sendPrompt, { isLoading }] = useCopyCreatorMutation()
   const [result, setResult] = useState<string>("")
   const { classes } = useStyles(undefined, { name: CopyCreator.name })
   const router = useRouter()
-  const activeLocale = router.locale
+  const activeLocale = router.locale as AvailableLocale
   const t = useTranslations("copyCreator")
   const copyCreatorForm = useForm({
     defaultValues: {
@@ -58,19 +55,44 @@ function CopyCreator(): JSX.Element {
     resolver: zodResolver(CopyCreatorInput),
   })
 
+  const toneOfVoiceSelectData: Array<SelectItem> =
+    activeLocale === "en"
+      ? TONE_OF_VOICE.sort().map((item) => ({
+          label: item,
+          value: item,
+        }))
+      : TONE_OF_VOICE_NL.sort().map((item) => ({
+          label: item,
+          value: item,
+        }))
+
+  const targetAudiencesSelectData: Array<SelectItem> =
+    activeLocale === "en"
+      ? TARGET_AUDIENCES.sort().map((item) => ({
+          label: item,
+          value: item,
+        }))
+      : TARGET_AUDIENCES_NL.sort().map((item) => ({
+          label: item,
+          value: item,
+        }))
+
   const handleSubmit = copyCreatorForm.handleSubmit(async (values) => {
     try {
-      await sendPrompt(values, {
-        onSuccess(data) {
-          setResult(data)
-        },
-      })
+      await sendPrompt(
+        { ...values, activeLocale },
+        {
+          onSuccess(data) {
+            setResult(data)
+          },
+        }
+      )
     } catch (error) {
       console.log(error)
     }
   })
 
-  console.log({ result, router, t })
+  console.log({ result })
 
   return (
     <Layout title="VIAMAR Copy creator">
