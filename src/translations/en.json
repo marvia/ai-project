@@ -1,0 +1,9 @@
+{
+  "copy-creator": {
+    "title": "Copy creator",
+    "tone-of-voice": {
+      "label": "Select keywords for your tone of voice",
+      "nothing-found": "Nothing found"
+    }
+  }
+}

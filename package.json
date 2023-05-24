@@ -58,6 +58,7 @@
     "embla-carousel-react": "8.0.0-rc02",
     "express": "4.18.2",
     "next": "^13.3.0",
+    "next-intl": "2.14.6",
     "openai": "3.2.1",
     "prisma": "4.6.1",
     "react": "18.2.0",
