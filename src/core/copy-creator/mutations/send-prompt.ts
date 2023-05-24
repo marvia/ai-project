@@ -27,7 +27,7 @@ const CopyCreatorMuation = resolver.pipe(
     console.log({ finalPrompt })
 
     try {
-      const url = "http://localhost:3000/api/chat"
+      const url = "https://ai-project-wine.vercel.app/api/chat"
 
       return await axios
         .post(url, { prompt: finalPrompt })
