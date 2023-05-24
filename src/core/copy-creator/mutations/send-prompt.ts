@@ -15,13 +15,15 @@ const CopyCreatorMutation = resolver.pipe(
     console.log({ finalPrompt })
 
     try {
-      const url = "http://13.53.134.133:5001/chat"
+      const url = "https://ai-project-wine.vercel.app/api/chat"
 
-      const result = await axios
+      return await axios
         .post(url, { prompt: finalPrompt })
         .then((response: { data: string }) => response.data)
-
-      return result
+        .catch((error) => {
+          console.error(error)
+          throw new Error("FAAAAIIL")
+        })
     } catch (e) {
       console.error(e)
       throw new Error("FAAAAIIL")

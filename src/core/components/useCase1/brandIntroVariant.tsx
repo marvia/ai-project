@@ -6,17 +6,16 @@ import {
   Group,
   createStyles,
   rem,
-  Divider,
   Skeleton,
   Container,
   Grid,
   Card,
   Stack,
+  Image,
 } from "@mantine/core"
 import { Fragment, useEffect, useState } from "react"
 import bg from "../bg.svg"
 import axios from "axios"
-import Image from "next/image"
 
 const useStyles = createStyles((theme) => {
   const BREAKPOINT = theme.fn.smallerThan("sm")
@@ -193,7 +192,7 @@ export function BrandIntroVariant() {
     const varPrompt = "```" + inputValue + "```"
     setLoading(true)
     await axios
-      .post("https://marvai-server.onrender.com/chat", { prompt: question + varPrompt })
+      .post("https://ai-project-wine.vercel.app/api/chat", { prompt: question + varPrompt })
       .then((res) => {
         setResponse1(res.data)
       })
@@ -210,7 +209,7 @@ export function BrandIntroVariant() {
     if (!response1.who_we_are) return
     setResponse2([{ url: "" }])
     axios
-      .post("https://marvai-server.onrender.com/image", { prompt: response1.who_we_are })
+      .post("https://ai-project-wine.vercel.app/api/chat", { prompt: response1.who_we_are })
       .then((res) => {
         setResponse2(res.data)
         setImageLoaded(true)
@@ -376,7 +375,7 @@ export function BrandIntroVariant() {
                   {response2.map((item, index) => (
                     <Grid.Col key={index} xs={4}>
                       <Card shadow="sm" padding="xl" component="a" target="_blank">
-                        <Image alt="example" src={item.url} />
+                        <Image alt={"generated image"} src={item.url} />
                       </Card>
                     </Grid.Col>
                   ))}
