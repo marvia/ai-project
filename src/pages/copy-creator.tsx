@@ -46,7 +46,7 @@ function CopyCreator(): JSX.Element {
   const [result, setResult] = useState<string>("")
   const { classes } = useStyles(undefined, { name: CopyCreator.name })
   const router = useRouter()
-  const t = useTranslations("copy-creator")
+  const t = useTranslations("copyCreator")
   const copyCreatorForm = useForm({
     defaultValues: {
       toneOfVoice: [],
@@ -95,9 +95,9 @@ function CopyCreator(): JSX.Element {
                   <MultiSelect
                     {...field}
                     data={toneOfVoiceSelectData}
-                    label={t("tone-of-voice.label")}
+                    label={t("toneOfVoice.label")}
                     searchable
-                    nothingFound={t("tone-of-voice.nothing-found")}
+                    nothingFound={t("toneOfVoice.nothingFound")}
                     classNames={{ root: classes.root }}
                     disabled={isLoading}
                     error={fieldState.error && <span>{fieldState.error.message}</span>}

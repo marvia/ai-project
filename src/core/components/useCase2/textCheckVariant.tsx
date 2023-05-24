@@ -16,6 +16,7 @@ import {
 import { Fragment, useEffect, useRef, useState } from "react"
 import bg from "../bg.svg"
 import axios from "axios"
+import Layout from "src/core/layouts/Layout"
 
 const useStyles = createStyles((theme) => {
   const BREAKPOINT = theme.fn.smallerThan("sm")
@@ -155,7 +156,7 @@ export function TextControl() {
   const child = <Skeleton height={140} radius="md" animate={true} />
 
   return (
-    <Fragment>
+    <Layout>
       <Paper shadow="md" radius="lg">
         <div className={classes.wrapper}>
           <form className={classes.form} onSubmit={handleSubmit}>
@@ -207,6 +208,6 @@ export function TextControl() {
 
         {/* response2 is an array with objects containing url: imageUrl  loop through the array and show the separate images*/}
       </Paper>
-    </Fragment>
+    </Layout>
   )
 }
