@@ -12,12 +12,15 @@ import {
   Title,
   createStyles,
 } from "@mantine/core"
+import { useRouter } from "next/router"
 import { useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { TARGET_AUDIENCES, TONE_OF_VOICE } from "src/core/copy-creator/constants"
 import CopyCreatorMutation from "src/core/copy-creator/mutations/send-prompt"
 import { CopyCreatorInput } from "src/core/copy-creator/zod"
 import Layout from "src/core/layouts/Layout"
+import { useTranslations } from "next-intl"
+import { GetStaticPropsContext } from "next"
 
 function useCopyCreatorMutation() {
   return useMutation(CopyCreatorMutation)
@@ -42,6 +45,8 @@ function CopyCreator(): JSX.Element {
   const [sendPrompt, { isLoading }] = useCopyCreatorMutation()
   const [result, setResult] = useState<string>("")
   const { classes } = useStyles(undefined, { name: CopyCreator.name })
+  const router = useRouter()
+  const t = useTranslations("copy-creator")
   const copyCreatorForm = useForm({
     defaultValues: {
       toneOfVoice: [],
@@ -64,7 +69,7 @@ function CopyCreator(): JSX.Element {
     }
   })
 
-  console.log({ result })
+  console.log({ result, router, t })
 
   return (
     <Layout title="VIAMAR Copy creator">
@@ -76,7 +81,7 @@ function CopyCreator(): JSX.Element {
           color: colors.blue[7],
         })}
       >
-        VIAMAR Copy creator
+        {t("title")}
       </Title>
 
       <Stack align="center">
@@ -90,9 +95,9 @@ function CopyCreator(): JSX.Element {
                   <MultiSelect
                     {...field}
                     data={toneOfVoiceSelectData}
-                    label="Select keywords for your tone of voice"
+                    label={t("tone-of-voice.label")}
                     searchable
-                    nothingFound="Nothing found"
+                    nothingFound={t("tone-of-voice.nothing-found")}
                     classNames={{ root: classes.root }}
                     disabled={isLoading}
                     error={fieldState.error && <span>{fieldState.error.message}</span>}
@@ -162,8 +167,16 @@ function CopyCreator(): JSX.Element {
   )
 }
 
-const useStyles = createStyles((theme) => ({
+const useStyles = createStyles(() => ({
   root: { width: "100%" },
 }))
+
+export async function getStaticProps({ locale }: GetStaticPropsContext) {
+  return {
+    props: {
+      messages: (await import(`../translations/${locale}.json`)).default,
+    },
+  }
+}
 
 export default CopyCreator
