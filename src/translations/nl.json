@@ -4,7 +4,19 @@
     "toneOfVoice": {
       "label": "Selecteer trefwoorden voor de tone of voice",
       "nothingFound": "Niets gevonden"
-    }
+    },
+    "targetAudience": {
+      "label": "Selecteer je doelgroep",
+      "nothingFound": "Niets gevonden"
+    },
+    "copyLength": {
+      "label": "Copy lengte"
+    },
+    "callToAction": {
+      "label": "Call to action",
+      "placeholder": "Wat wil je dat je doelgroep doet?"
+    },
+    "submitButton": "Creëer copy"
   },
   "localeSwitcher": {
     "label": "Taal"

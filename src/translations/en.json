@@ -3,8 +3,20 @@
     "title": "Copy creator",
     "toneOfVoice": {
       "label": "Select keywords for your tone of voice",
-      "nothing-found": "Nothing found"
-    }
+      "nothingFound": "Nothing found"
+    },
+    "targetAudience": {
+      "label": "Select your target audience",
+      "nothingFound": "Nothing found"
+    },
+    "copyLength": {
+      "label": "Length of copy"
+    },
+    "callToAction": {
+      "label": "Call to action",
+      "placeholder": "What do you want your audience to do?"
+    },
+    "submitButton": "Create copy"
   },
   "localeSwitcher": {
     "label": "Language"

@@ -46,6 +46,7 @@ function CopyCreator(): JSX.Element {
   const [result, setResult] = useState<string>("")
   const { classes } = useStyles(undefined, { name: CopyCreator.name })
   const router = useRouter()
+  const activeLocale = router.locale
   const t = useTranslations("copyCreator")
   const copyCreatorForm = useForm({
     defaultValues: {
@@ -112,9 +113,9 @@ function CopyCreator(): JSX.Element {
                   <MultiSelect
                     {...field}
                     data={targetAudiencesSelectData}
-                    label="Select your target audience"
+                    label={t("targetAudience.label")}
                     searchable
-                    nothingFound="Nothing found"
+                    nothingFound={t("targetAudience.nothingFound")}
                     classNames={{ root: classes.root }}
                     disabled={isLoading}
                     error={fieldState.error && <span>{fieldState.error.message}</span>}
@@ -129,7 +130,7 @@ function CopyCreator(): JSX.Element {
                   <Select
                     {...field}
                     data={lengtSelectData}
-                    label="Length of copy"
+                    label={t("copyLength.label")}
                     classNames={{ root: classes.root }}
                     disabled={isLoading}
                     error={fieldState.error && <span>{fieldState.error.message}</span>}
@@ -143,8 +144,8 @@ function CopyCreator(): JSX.Element {
                 render={({ field, fieldState }) => (
                   <Textarea
                     {...field}
-                    label="Call to action"
-                    placeholder="What do you want your audience to do?"
+                    label={t("callToAction.label")}
+                    placeholder={t("callToAction.placeholder")}
                     minRows={4}
                     classNames={{ root: classes.root }}
                     disabled={isLoading}
@@ -154,7 +155,7 @@ function CopyCreator(): JSX.Element {
               />
 
               <Button mt="md" type="submit" loading={isLoading} disabled={isLoading}>
-                ✨ Create copy ✨
+                ✨ {t("submitButton")} ✨
               </Button>
             </Stack>
           </Card>
