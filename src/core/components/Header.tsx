@@ -1,5 +1,5 @@
 import { useRouter } from "next/router"
-import { Flex, Header, Select, Title, createStyles } from "@mantine/core"
+import { Flex, Header, Select, SelectItem, Title, createStyles } from "@mantine/core"
 import { useTranslations } from "next-intl"
 import Link from "next/link"
 
@@ -14,7 +14,7 @@ const AppHeader: React.FC = () => {
     router.push({ pathname, query }, undefined, { locale: newLocale })
   }
 
-  const localeOptions =
+  const localeOptions: Array<SelectItem> =
     locales?.map((loc: string) => ({ label: loc.toUpperCase(), value: loc })) || []
 
   return (
