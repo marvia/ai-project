@@ -27,17 +27,15 @@ const CopyCreatorMuation = resolver.pipe(
     console.log({ finalPrompt })
 
     try {
-      const url = "/api/chat"
+      const url = "http://localhost:3000/api/chat"
 
-      const result = await axios
+      return await axios
         .post(url, { prompt: finalPrompt })
         .then((response: { data: string }) => response.data)
         .catch((error) => {
           console.error(error)
           throw new Error("FAAAAIIL")
         })
-
-      return result
     } catch (e) {
       console.error(e)
       throw new Error("FAAAAIIL")
