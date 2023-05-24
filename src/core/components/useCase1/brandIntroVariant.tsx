@@ -16,6 +16,7 @@ import {
 import { Fragment, useEffect, useState } from "react"
 import bg from "../bg.svg"
 import axios from "axios"
+import Layout from "src/core/layouts/Layout"
 
 const useStyles = createStyles((theme) => {
   const BREAKPOINT = theme.fn.smallerThan("sm")
@@ -222,7 +223,7 @@ export function BrandIntroVariant() {
   const child = <Skeleton height={140} radius="md" animate={true} />
 
   return (
-    <Fragment>
+    <Layout>
       <Paper shadow="md" radius="lg">
         <div className={classes.wrapper}>
           <form className={classes.form} onSubmit={handleSubmit}>
@@ -385,6 +386,6 @@ export function BrandIntroVariant() {
           </div>
         )}
       </Paper>
-    </Fragment>
+    </Layout>
   )
 }

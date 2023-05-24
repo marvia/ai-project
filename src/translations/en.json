@@ -1,9 +1,12 @@
 {
-  "copy-creator": {
+  "copyCreator": {
     "title": "Copy creator",
-    "tone-of-voice": {
+    "toneOfVoice": {
       "label": "Select keywords for your tone of voice",
       "nothing-found": "Nothing found"
     }
+  },
+  "localeSwitcher": {
+    "label": "Language"
   }
 }
