@@ -21,16 +21,13 @@ import {
   TONE_OF_VOICE,
   TONE_OF_VOICE_NL,
 } from "src/core/copy-creator/constants"
-import CopyCreatorMutation from "src/core/copy-creator/mutations/send-prompt"
 import { CopyCreatorInput } from "src/core/copy-creator/zod"
 import Layout from "src/core/layouts/Layout"
 import { useTranslations } from "next-intl"
 import { GetStaticPropsContext } from "next"
+import axios from "axios"
+import { DEFAULT_PROMPT } from "src/core/copy-creator/constants"
 import { AvailableLocale } from "src/types"
-
-function useCopyCreatorMutation() {
-  return useMutation(CopyCreatorMutation)
-}
 
 const lengtSelectData: Array<SelectItem> = [
   { label: "Short", value: "0 - 20" },
@@ -39,8 +36,8 @@ const lengtSelectData: Array<SelectItem> = [
 ]
 
 function CopyCreator(): JSX.Element {
-  const [sendPrompt, { isLoading }] = useCopyCreatorMutation()
   const [result, setResult] = useState<string>("")
+  const [loading, setLoading] = useState<boolean>(false)
   const { classes } = useStyles(undefined, { name: CopyCreator.name })
   const router = useRouter()
   const activeLocale = router.locale as AvailableLocale
@@ -53,6 +50,40 @@ function CopyCreator(): JSX.Element {
       copyLength: "",
     },
     resolver: zodResolver(CopyCreatorInput),
+  })
+
+  const sendPrompt = async ({ toneOfVoice, targetAudiences, callToAction, copyLength }) => {
+    const finalPrompt = `${DEFAULT_PROMPT} \`\`\` Tone of voice: ${toneOfVoice.join(
+      ", "
+    )}. Target audience: ${targetAudiences.join(
+      ", "
+    )}. Length: ${copyLength} words. Call to action: ${callToAction} \`\`\``
+
+    try {
+      const url = "/api/chat"
+
+      await axios
+        .post(url, { prompt: finalPrompt })
+        .then((response: { data: string }) => setResult(response.data))
+        .catch((error) => {
+          console.error(error.message)
+          throw new Error("FAAAAIIL")
+        })
+    } catch (e) {
+      console.error(e.message)
+      throw new Error("FAAAAIIL")
+    }
+    setLoading(false)
+  }
+
+  const handleSubmit = copyCreatorForm.handleSubmit(async (values) => {
+    try {
+      setLoading(true)
+      await sendPrompt(values)
+    } catch (error) {
+      console.log(error)
+      setLoading(false)
+    }
   })
 
   const toneOfVoiceSelectData: Array<SelectItem> =
@@ -76,21 +107,6 @@ function CopyCreator(): JSX.Element {
           label: item,
           value: item,
         }))
-
-  const handleSubmit = copyCreatorForm.handleSubmit(async (values) => {
-    try {
-      await sendPrompt(
-        { ...values, activeLocale },
-        {
-          onSuccess(data) {
-            setResult(data)
-          },
-        }
-      )
-    } catch (error) {
-      console.log(error)
-    }
-  })
 
   console.log({ result })
 
@@ -122,7 +138,7 @@ function CopyCreator(): JSX.Element {
                     searchable
                     nothingFound={t("toneOfVoice.nothingFound")}
                     classNames={{ root: classes.root }}
-                    disabled={isLoading}
+                    disabled={loading}
                     error={fieldState.error && <span>{fieldState.error.message}</span>}
                   />
                 )}
@@ -139,7 +155,7 @@ function CopyCreator(): JSX.Element {
                     searchable
                     nothingFound={t("targetAudience.nothingFound")}
                     classNames={{ root: classes.root }}
-                    disabled={isLoading}
+                    disabled={loading}
                     error={fieldState.error && <span>{fieldState.error.message}</span>}
                   />
                 )}
@@ -154,7 +170,7 @@ function CopyCreator(): JSX.Element {
                     data={lengtSelectData}
                     label={t("copyLength.label")}
                     classNames={{ root: classes.root }}
-                    disabled={isLoading}
+                    disabled={loading}
                     error={fieldState.error && <span>{fieldState.error.message}</span>}
                   />
                 )}
@@ -170,13 +186,13 @@ function CopyCreator(): JSX.Element {
                     placeholder={t("callToAction.placeholder")}
                     minRows={4}
                     classNames={{ root: classes.root }}
-                    disabled={isLoading}
+                    disabled={loading}
                     error={fieldState.error && <span>{fieldState.error.message}</span>}
                   />
                 )}
               />
 
-              <Button mt="md" type="submit" loading={isLoading} disabled={isLoading}>
+              <Button mt="md" type="submit" loading={loading} disabled={loading}>
                 ✨ {t("submitButton")} ✨
               </Button>
             </Stack>
