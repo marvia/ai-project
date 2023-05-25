@@ -1,4 +1,3 @@
-import { useMutation } from "@blitzjs/rpc"
 import { zodResolver } from "@hookform/resolvers/zod"
 import {
   Button,
@@ -15,12 +14,7 @@ import {
 import { useRouter } from "next/router"
 import { useState } from "react"
 import { Controller, useForm } from "react-hook-form"
-import {
-  DEFAULT_PROMPT_NL,
-  TARGET_AUDIENCES,
-  TONE_OF_VOICE,
-  TONE_OF_VOICE_NL,
-} from "src/core/copy-creator/constants"
+import { TARGET_AUDIENCES, TONE_OF_VOICE } from "src/core/copy-creator/constants"
 import { CopyCreatorInput } from "src/core/copy-creator/zod"
 import Layout from "src/core/layouts/Layout"
 import { useTranslations } from "next-intl"
@@ -53,30 +47,21 @@ function CopyCreator(): JSX.Element {
   })
 
   const sendPrompt = async ({ toneOfVoice, targetAudiences, callToAction, copyLength }) => {
-    const languageSetting =
-      activeLocale === "en" ? " Respond in English." : " Translate your response to Dutch."
+    const languageSetting = activeLocale === "en" ? "" : "Respond in Dutch."
 
-    const finalPrompt =
-      `${DEFAULT_PROMPT} \`\`\` Tone of voice: ${toneOfVoice.join(
-        ", "
-      )}. Target audience: ${targetAudiences.join(
-        ", "
-      )}. Length: ${copyLength} words. Call to action: ${callToAction} \`\`\`` + languageSetting
-
-    const promptNL =
-      `${DEFAULT_PROMPT_NL} \`\`\` Tone of voice: ${toneOfVoice.join(
-        ", "
-      )}. Target audience: ${targetAudiences.join(
-        ", "
-      )}. Length: ${copyLength} words. Call to action: ${callToAction} \`\`\`` + languageSetting
+    const prompt = `${DEFAULT_PROMPT} \`\`\` Tone of voice: ${toneOfVoice.join(
+      ", "
+    )}. Target audience: ${targetAudiences.join(
+      ", "
+    )}. Length: ${copyLength} words. Call to action: ${callToAction}. \`\`\` ${languageSetting}`
 
     try {
       const url = "/api/chat"
 
-      console.log(finalPrompt)
+      console.log(prompt)
 
       await axios
-        .post(url, { prompt: activeLocale === "en" ? finalPrompt : promptNL })
+        .post(url, { prompt })
         .then((response: { data: string }) => setResult(response.data))
         .catch((error) => {
           console.error(error.message)
@@ -99,18 +84,16 @@ function CopyCreator(): JSX.Element {
     }
   })
 
-  const toneOfVoiceSelectData: Array<SelectItem> =
-    activeLocale === "en"
-      ? TONE_OF_VOICE.sort().map((item) => ({
-          label: item,
-          value: item,
-        }))
-      : TONE_OF_VOICE_NL.sort().map((item) => ({
-          label: item,
-          value: item,
-        }))
+  const toneOfVoiceSelectData: Array<SelectItem> = TONE_OF_VOICE.sort((a, b) =>
+    activeLocale === "en" ? a.en.localeCompare(b.en) : a.nl.localeCompare(b.nl)
+  ).map((item) => ({
+    label: activeLocale === "en" ? item.en : item.nl,
+    value: item.en,
+  }))
 
-  const targetAudiencesSelectData: Array<SelectItem> = TARGET_AUDIENCES.sort().map((item) => ({
+  const targetAudiencesSelectData: Array<SelectItem> = TARGET_AUDIENCES.sort((a, b) =>
+    activeLocale === "en" ? a.en.localeCompare(b.en) : a.nl.localeCompare(b.nl)
+  ).map((item) => ({
     label: activeLocale === "en" ? item.en : item.nl,
     value: item.en,
   }))
