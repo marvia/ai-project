@@ -2,12 +2,11 @@ import { Fragment } from "react"
 import { BlitzPage } from "@blitzjs/next"
 import { BrandIntroVariant } from "src/core/components/useCase1/brandIntroVariant"
 import { GetStaticPropsContext } from "next"
-import Layout from "src/core/layouts/Layout"
 
-const Home: BlitzPage = () => {
+const Brand: BlitzPage = () => {
   return (
     <Fragment>
-      <Layout>Home</Layout>
+      <BrandIntroVariant />
     </Fragment>
   )
 }
@@ -20,4 +19,4 @@ export async function getStaticProps({ locale }: GetStaticPropsContext) {
   }
 }
 
-export default Home
+export default Brand

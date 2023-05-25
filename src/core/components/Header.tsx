@@ -19,7 +19,8 @@ const AppHeader: React.FC = () => {
     <Header height={150} classNames={{ root: classes.root }}>
       <Flex align="center" justify="center" direction="column">
         <Group>
-          <Link href={"/"}>Brand inspirition</Link>
+          <Link href={"/"}>Home</Link>
+          <Link href={"/brand"}>Brand inspirition</Link>
           <Link href={"/copy-creator"}>Copy creator</Link>
         </Group>
         <Title mb="lg">
