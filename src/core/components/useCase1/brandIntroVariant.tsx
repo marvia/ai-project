@@ -13,7 +13,7 @@ import {
   Stack,
   Image,
 } from "@mantine/core"
-import { Fragment, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import bg from "../bg.svg"
 import axios from "axios"
 import Layout from "src/core/layouts/Layout"
@@ -256,21 +256,30 @@ export function BrandIntroVariant() {
             {loading && (
               <Grid>
                 <Grid.Col xs={4}>{child}</Grid.Col>
-
-                <Grid.Col xs={8}>
-                  <Stack>
-                    {child}
-                    {child}
-                  </Stack>
-                </Grid.Col>
-                <Grid.Col xs={4}></Grid.Col>
-
                 <Grid.Col xs={4}>{child}</Grid.Col>
                 <Grid.Col xs={4}>{child}</Grid.Col>
                 <Grid.Col xs={4}>{child}</Grid.Col>
                 <Grid.Col xs={4}>{child}</Grid.Col>
                 <Grid.Col xs={4}>{child}</Grid.Col>
               </Grid>
+            )}
+
+            {imageLoaded && (
+              <div>
+                <Container my="md">
+                  {response2.length > 0 && (
+                    <Grid>
+                      {response2.map((item, index) => (
+                        <Grid.Col key={index} xs={4}>
+                          <Card shadow="sm" padding="xl" component="a" target="_blank">
+                            <Image alt={"generated image"} src={item.url} />
+                          </Card>
+                        </Grid.Col>
+                      ))}
+                    </Grid>
+                  )}
+                </Container>
+              </div>
             )}
 
             {response1.brand_story && (

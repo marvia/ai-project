@@ -22,6 +22,7 @@ const AppHeader: React.FC = () => {
           <Link href={"/"}>Home</Link>
           <Link href={"/brand"}>Brand inspirition</Link>
           <Link href={"/copy-creator"}>Copy creator</Link>
+          <Link href={"/japanese"}>Japanese</Link>
         </Group>
         <Title mb="lg">
           <Link href="/">MARVIA AI</Link>
