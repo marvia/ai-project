@@ -18,6 +18,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     .catch((err) => {
       console.log(err)
     })
-  res.send(completion.data.choices[0].message.content)
+
+  res.send(completion?.data.choices[0].message.content)
   // receive some user data, ask chat gpt to generate something and return to the user
 }

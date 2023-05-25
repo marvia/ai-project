@@ -16,6 +16,7 @@ import { useRouter } from "next/router"
 import { useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import {
+  DEFAULT_PROMPT_NL,
   TARGET_AUDIENCES,
   TARGET_AUDIENCES_NL,
   TONE_OF_VOICE,
@@ -28,6 +29,7 @@ import { GetStaticPropsContext } from "next"
 import axios from "axios"
 import { DEFAULT_PROMPT } from "src/core/copy-creator/constants"
 import { AvailableLocale } from "src/types"
+import { aC } from "vitest/dist/types-de0e0997"
 
 const lengtSelectData: Array<SelectItem> = [
   { label: "Short", value: "0 - 20" },
@@ -53,17 +55,30 @@ function CopyCreator(): JSX.Element {
   })
 
   const sendPrompt = async ({ toneOfVoice, targetAudiences, callToAction, copyLength }) => {
-    const finalPrompt = `${DEFAULT_PROMPT} \`\`\` Tone of voice: ${toneOfVoice.join(
-      ", "
-    )}. Target audience: ${targetAudiences.join(
-      ", "
-    )}. Length: ${copyLength} words. Call to action: ${callToAction} \`\`\``
+    const languageSetting =
+      activeLocale === "en" ? " Respond in English." : " Translate your response to Dutch."
+
+    const finalPrompt =
+      `${DEFAULT_PROMPT} \`\`\` Tone of voice: ${toneOfVoice.join(
+        ", "
+      )}. Target audience: ${targetAudiences.join(
+        ", "
+      )}. Length: ${copyLength} words. Call to action: ${callToAction} \`\`\`` + languageSetting
+
+    const promptNL =
+      `${DEFAULT_PROMPT_NL} \`\`\` Tone of voice: ${toneOfVoice.join(
+        ", "
+      )}. Target audience: ${targetAudiences.join(
+        ", "
+      )}. Length: ${copyLength} words. Call to action: ${callToAction} \`\`\`` + languageSetting
 
     try {
       const url = "/api/chat"
 
+      console.log(finalPrompt)
+
       await axios
-        .post(url, { prompt: finalPrompt })
+        .post(url, { prompt: activeLocale === "en" ? finalPrompt : promptNL })
         .then((response: { data: string }) => setResult(response.data))
         .catch((error) => {
           console.error(error.message)
@@ -97,16 +112,10 @@ function CopyCreator(): JSX.Element {
           value: item,
         }))
 
-  const targetAudiencesSelectData: Array<SelectItem> =
-    activeLocale === "en"
-      ? TARGET_AUDIENCES.sort().map((item) => ({
-          label: item,
-          value: item,
-        }))
-      : TARGET_AUDIENCES_NL.sort().map((item) => ({
-          label: item,
-          value: item,
-        }))
+  const targetAudiencesSelectData: Array<SelectItem> = TARGET_AUDIENCES.sort().map((item) => ({
+    label: activeLocale === "en" ? item.en : item.nl,
+    value: item.en,
+  }))
 
   console.log({ result })
 
