@@ -26,6 +26,7 @@ const handleGET = async (req: NextApiRequest, res: NextApiResponse) => {
 }
 
 const handlePOST = async (req: NextApiRequest, res: NextApiResponse) => {
+  res.setHeader("Allow", ["GET", "POST"])
   const { prompt } = req.body
   const messages = [{ role: "user", content: prompt }]
   const completion = await openai
