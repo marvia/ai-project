@@ -211,7 +211,7 @@ export function BrandIntroVariant() {
     if (!response1.who_we_are) return
     setResponse2([{ url: "" }])
     axios
-      .post("/api/chat", { prompt: response1.who_we_are })
+      .post("/api/image", { prompt: response1.who_we_are })
       .then((res) => {
         setResponse2(res.data)
         setImageLoaded(true)

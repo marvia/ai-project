@@ -18,7 +18,6 @@ import { Controller, useForm } from "react-hook-form"
 import {
   DEFAULT_PROMPT_NL,
   TARGET_AUDIENCES,
-  TARGET_AUDIENCES_NL,
   TONE_OF_VOICE,
   TONE_OF_VOICE_NL,
 } from "src/core/copy-creator/constants"
@@ -29,7 +28,6 @@ import { GetStaticPropsContext } from "next"
 import axios from "axios"
 import { DEFAULT_PROMPT } from "src/core/copy-creator/constants"
 import { AvailableLocale } from "src/types"
-import { aC } from "vitest/dist/types-de0e0997"
 
 const lengtSelectData: Array<SelectItem> = [
   { label: "Short", value: "0 - 20" },
