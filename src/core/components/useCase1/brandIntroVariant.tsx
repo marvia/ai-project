@@ -18,8 +18,6 @@ import bg from "../bg.svg"
 import axios from "axios"
 import Layout from "src/core/layouts/Layout"
 
-const apiKey = "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"
-
 const useStyles = createStyles((theme) => {
   const BREAKPOINT = theme.fn.smallerThan("sm")
 
@@ -132,7 +130,7 @@ export function BrandIntroVariant() {
     promise: string
     mission: string
     vision: string
-    values: string[]
+    values: string
     product: string
     slogans: string[]
   }
@@ -152,7 +150,7 @@ export function BrandIntroVariant() {
     promise: "",
     mission: "",
     vision: "",
-    values: [],
+    values: "",
     product: "",
     slogans: [""],
   })
@@ -170,7 +168,7 @@ export function BrandIntroVariant() {
     - a promise in more than 10 words\
     - a mission in 20 words or less\
     - a vision 10 words or less\
-    - 3 brand values in an array\
+    - 3 brand values\
     - answer the question: what product or products does the brand sell?\
     - based on the text include an array of 6 brand slogans based on the brand introduction. \
     the brand slogans should be unique and should motivate the reader to buy the product. \
@@ -181,45 +179,29 @@ export function BrandIntroVariant() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    setLoading(true)
     setResponse1({
       brand_story: "",
       who_we_are: "",
       promise: "",
       mission: "",
       vision: "",
-      values: [],
+      values: "",
       product: "",
       slogans: [""],
     })
     setResponse2([{ url: "" }])
     const varPrompt = "```" + inputValue + "```"
-    const messages = [{ role: "user", content: question + varPrompt }]
-
-    const client = axios.create({
-      headers: {
-        Authorization: "Bearer " + apiKey,
-      },
-    })
-
-    const params = {
-      model: "gpt-3.5-turbo",
-      messages: messages,
-      temperature: 0,
-      max_tokens: 1000,
-    }
-
-    client
-      .post("https://api.openai.com/v1/chat/completions", params)
-      .then((result) => {
-        console.log(result.data.choices[0].message.content)
-        const returnData = JSON.parse(result.data.choices[0].message.content)
-        setResponse1(returnData)
-        setLoading(false)
+    setLoading(true)
+    await axios
+      .post("/api/chat", { prompt: question + varPrompt })
+      .then((res) => {
+        setResponse1(res.data)
       })
-      .catch((err) => {
-        console.log(err)
+      .catch(function (error) {
+        console.log(error)
       })
+
+    setLoading(false)
   }
 
   // useeffect to get image when response1 is in
@@ -366,9 +348,7 @@ export function BrandIntroVariant() {
                       </Text>
 
                       <Text mt="xs" color="dimmed" size="sm">
-                        {response1.values.map((value, index) => (
-                          <span key={index}>{value} </span>
-                        ))}
+                        {response1.values}
                       </Text>
                     </Card>
                     <Card shadow="sm" padding="xl" component="a" target="_blank">

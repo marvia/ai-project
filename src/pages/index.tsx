@@ -15,7 +15,7 @@ const Home: BlitzPage = () => {
           <Grid.Col span={6}>
             <SimpleGrid cols={3} breakpoints={[{ maxWidth: "sm", cols: 1 }]} spacing={50}>
               <Tile
-                image="https://oaidalleapiprodscus.blob.core.windows.net/private/org-FnlNP4fmGbsG8Jm62Nm3pbdt/user-JkMRkDYuHBhX7TQ93y3rZfh1/img-sEnsd6pElo7fJCQe49VNzP8r.png?st=2023-05-25T08%3A27%3A06Z&se=2023-05-25T10%3A27%3A06Z&sp=r&sv=2021-08-06&sr=b&rscd=inline&rsct=image/png&skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2023-05-25T00%3A56%3A12Z&ske=2023-05-26T00%3A56%3A12Z&sks=b&skv=2021-08-06&sig=jYm%2BUo/x%2BGj8fTnUmuwhY52xRCpgp8U9J%2BuR4PMbzkc%3D"
+                image="https://www.2foodtrippers.com/wp-content/uploads/2019/08/Flat-White-at-Koffie-Academie-in-Amsterdam-735x490.jpg"
                 title="Brand inspiration"
                 category="brand"
               />
