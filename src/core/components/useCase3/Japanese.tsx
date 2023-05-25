@@ -1,6 +1,6 @@
 import { useState } from "react"
 import Layout from "src/core/layouts/Layout"
-import { SimpleGrid, Col, Grid, Textarea } from "@mantine/core"
+import { SimpleGrid, Col, Grid, Textarea, Space } from "@mantine/core"
 import axios from "axios"
 import { set, string } from "zod"
 
@@ -43,16 +43,19 @@ export const Japanese = () => {
         <Grid.Col span={2}></Grid.Col>
         <Grid.Col span={6}>
           <SimpleGrid cols={3} breakpoints={[{ maxWidth: "sm", cols: 1 }]} spacing={50}>
-            Japanese
             <form onSubmit={handleSubmit}>
               <Textarea
                 autosize
+                minRows={10}
                 label="What to translate to japanese?"
                 onChange={changeEvent}
               ></Textarea>
-              <button type="submit">Submit</button>
+              <button disabled={loading} type="submit">
+                Submit
+              </button>
             </form>
           </SimpleGrid>
+          <Space h={10} />
           {stringifiedValues &&
             stringifiedValues.map((value, index) => <div key={index}>{value}</div>)}
         </Grid.Col>
