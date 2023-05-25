@@ -193,7 +193,7 @@ export function BrandIntroVariant() {
     const varPrompt = "```" + inputValue + "```"
     setLoading(true)
     await axios
-      .post("https://ai-project-wine.vercel.app/api/chat", { prompt: question + varPrompt })
+      .post("/api/chat", { prompt: question + varPrompt })
       .then((res) => {
         setResponse1(res.data)
       })
@@ -210,7 +210,7 @@ export function BrandIntroVariant() {
     if (!response1.who_we_are) return
     setResponse2([{ url: "" }])
     axios
-      .post("https://ai-project-wine.vercel.app/api/chat", { prompt: response1.who_we_are })
+      .post("/api/chat", { prompt: response1.who_we_are })
       .then((res) => {
         setResponse2(res.data)
         setImageLoaded(true)
