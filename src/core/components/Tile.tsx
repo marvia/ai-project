@@ -54,7 +54,7 @@ export function Tile({ image, title, category }: ArticleCardImageProps) {
           {title}
         </Title>
       </div>
-      <Button variant="white" color="dark">
+      <Button variant="white" color="dark" component="a" href={category}>
         Show me now
       </Button>
     </Paper>

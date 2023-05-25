@@ -1,11 +1,31 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 import openai from "../../core/utils/openai"
 
-type Data = {
-  name: string
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const { method } = req
+
+  switch (method) {
+    case "GET":
+      return handleGET(req, res)
+    case "POST":
+      return handlePOST(req, res)
+    default:
+      res.setHeader("Allow", ["GET", "POST"])
+      res.status(405).json({
+        data: null,
+        error: { message: `Method ${method} Not Allowed` },
+      })
+  }
 }
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
+const handleGET = async (req: NextApiRequest, res: NextApiResponse) => {
+  return res.status(200).json({
+    data: {},
+    error: null,
+  })
+}
+
+const handlePOST = async (req: NextApiRequest, res: NextApiResponse) => {
   const { prompt } = req.body
   const messages = [{ role: "user", content: prompt }]
   const completion = await openai
@@ -18,6 +38,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     .catch((err) => {
       console.log(err)
     })
-  res.status(200).send(completion.data.choices[0].message.content)
-  // receive some user data, ask chat gpt to generate something and return to the user
+  return res.status(200).json(completion.data.choices[0].message.content)
 }
