@@ -24,11 +24,11 @@ const Home: BlitzPage = () => {
                 title="Copy creator"
                 category="copy-creator"
               />
-              {/* <Tile
-                image="https://uniqueoptiek.nl/wp-content/uploads/2022/11/receptor_black_cx1_indoor_dt_view_600x_kleurenblindbril_enchroma-100x100.jpg"
-                title="glass"
-                category="chroma"
-              /> */}
+              <Tile
+                image="https://images.jacobinmag.com/2017/03/33488189702_f1eb2cf3d1_k.jpg"
+                title="Japanese Translations"
+                category="japanese"
+              />
             </SimpleGrid>
           </Grid.Col>
           <Grid.Col span={2}></Grid.Col>
