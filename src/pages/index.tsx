@@ -1,10 +1,9 @@
 import { Fragment } from "react"
 import { BlitzPage } from "@blitzjs/next"
-import { BrandIntroVariant } from "src/core/components/useCase1/brandIntroVariant"
 import { GetStaticPropsContext } from "next"
 import Layout from "src/core/layouts/Layout"
 import { Tile } from "src/core/components/Tile"
-import { SimpleGrid, Col, Grid } from "@mantine/core"
+import { SimpleGrid, Grid } from "@mantine/core"
 
 const Home: BlitzPage = () => {
   return (

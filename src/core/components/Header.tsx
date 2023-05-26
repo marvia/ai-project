@@ -24,9 +24,7 @@ const AppHeader: React.FC = () => {
           <Link href={"/copy-creator"}>Copy creator</Link>
           <Link href={"/japanese"}>Japanese</Link>
         </Group>
-        <Title mb="lg">
-          <Link href="/">MARVIA AI</Link>
-        </Title>
+        <Title mb="lg">MARVIA AI</Title>
 
         <Select
           className={classes.localeSwitcher}

@@ -18,6 +18,7 @@
     },
     "submitButton": "Create copy"
   },
+
   "localeSwitcher": {
     "label": "Language"
   }

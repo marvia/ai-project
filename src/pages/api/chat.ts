@@ -12,7 +12,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     .createChatCompletion({
       model: "gpt-3.5-turbo",
       messages: messages,
-      temperature: 0.5,
+      temperature: 0.8,
       max_tokens: 1000,
     })
     .catch((err) => {
