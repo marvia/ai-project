@@ -15,7 +15,7 @@ import {
   Badge,
 } from "@mantine/core"
 import { useRouter } from "next/router"
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { TARGET_AUDIENCES, TONE_OF_VOICE } from "src/core/copy-creator/constants"
 import { CopyCreatorInput } from "src/core/copy-creator/zod"
@@ -101,10 +101,21 @@ function ImageDescriptor(): JSX.Element {
     value: item.en,
   }))
 
-  const image1 = "https://i.imgur.com/vRq5YWt.png"
+  const [image1, setImage1] = useState<string>("")
 
-  const imageApi =
-    "https://ai-alt-text-generator-nu-liard.vercel.app/api/generate?imageUrl=https://i.imgur.com/vRq5YWt.png"
+  const uploadImage = () => {
+    let r = (Math.random() + 1).toString(36).substring(7)
+    setImage1("https://picsum.photos/seed/" + r + "/400/400")
+  }
+
+  console.log(image1)
+
+  const imageApi = `https://ai-alt-text-generator-nu-liard.vercel.app/api/generate?imageUrl=${image1}`
+
+  const reset = () => {
+    setImage1("")
+    setResult("")
+  }
 
   const getImageDescription = async () => {
     try {
@@ -139,24 +150,47 @@ function ImageDescriptor(): JSX.Element {
 
       <Stack align="center">
         <Card shadow="sm" padding="lg" radius="md" withBorder>
-          <Card.Section>
-            <Image src={image1} height={500} alt="example 1" />
-          </Card.Section>
+          {image1 !== "" && (
+            <Card.Section>
+              <Image src={image1} height={500} alt="example 1" />
+            </Card.Section>
+          )}
 
           <Text mt={10} size="lg" align="center">
             {result}
           </Text>
 
-          <Button
-            variant="light"
-            color="blue"
-            fullWidth
-            mt="md"
-            radius="md"
-            onClick={getImageDescription}
-          >
-            Describe image
-          </Button>
+          {image1 === "" && (
+            <Button
+              variant="light"
+              color="blue"
+              fullWidth
+              mt="md"
+              radius="md"
+              onClick={uploadImage}
+            >
+              Upload image
+            </Button>
+          )}
+
+          {image1 !== "" && (
+            <Button
+              variant="light"
+              color="blue"
+              fullWidth
+              mt="md"
+              radius="md"
+              onClick={getImageDescription}
+            >
+              Describe image
+            </Button>
+          )}
+
+          {result !== "" && (
+            <Button variant="light" color="blue" fullWidth mt="md" radius="md" onClick={reset}>
+              New
+            </Button>
+          )}
         </Card>
       </Stack>
     </Layout>
