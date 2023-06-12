@@ -17,7 +17,6 @@ import { useEffect, useState } from "react"
 import bg from "../bg.svg"
 import axios from "axios"
 import Layout from "src/core/layouts/Layout"
-import { API_URL } from "src/pages/api/constants"
 
 const useStyles = createStyles((theme) => {
   const BREAKPOINT = theme.fn.smallerThan("sm")
