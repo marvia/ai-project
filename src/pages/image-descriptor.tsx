@@ -139,6 +139,7 @@ function ImageDescriptor(): JSX.Element {
     <Layout title="VIAMAR Image Descriptor">
       <Title
         mt="md"
+        m="lg"
         order={1}
         align="center"
         sx={({ colors }) => ({

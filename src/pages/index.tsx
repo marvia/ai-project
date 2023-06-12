@@ -24,11 +24,11 @@ const Home: BlitzPage = () => {
                 title="Copy creator"
                 category="copy-creator"
               />
-              {/* <Tile
-                image="https://images.jacobinmag.com/2017/03/33488189702_f1eb2cf3d1_k.jpg"
-                title="Japanese Translations"
-                category="japanese"
-              /> */}
+              <Tile
+                image="https://picsum.photos/360/400"
+                title="Image descriptor"
+                category="image-descriptor"
+              />
             </SimpleGrid>
           </Grid.Col>
           <Grid.Col span={2}></Grid.Col>
