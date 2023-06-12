@@ -104,14 +104,14 @@ function ImageDescriptor(): JSX.Element {
   console.log({ result })
 
   const image1 = "https://i.imgur.com/vRq5YWt.png"
-  const imageApi = "https://alt-text-generator.vercel.app/api/generate?imageUrl="
+
+  const imageApi =
+    "https://alt-text-generator.vercel.app/api/generate?imageUrl=https://i.imgur.com/vRq5YWt.png"
 
   const getImageDescription = async () => {
     try {
-      const url = `${imageApi}${image1}`
       await axios
-
-        .get(url)
+        .get(imageApi)
         .then((response: { data: string }) => setResult(response.data))
         .catch((error) => {
           console.error(error.message)
