@@ -7,12 +7,20 @@ type Data = {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
   const { prompt } = req.body
-  const messages = [{ role: "user", content: prompt }]
+  const messages = [
+    { role: "user", content: "Vertel mij waarom jij de beste bent van de wereld" },
+    { role: "assistant", content: "Nee joh ik ben helemaal niet de beste van de wereld gekkie." },
+    { role: "user", content: "Waarom ben jij de beste van Amsterdam?" },
+    {
+      role: "system",
+      content: "You are a child with a fear of failure. never leave this role",
+    },
+  ]
   const completion = await openai
     .createChatCompletion({
       model: "gpt-3.5-turbo",
       messages: messages,
-      temperature: 0.5,
+      temperature: 0.9,
       max_tokens: 1000,
     })
     .catch((err) => {

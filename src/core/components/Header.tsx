@@ -20,9 +20,10 @@ const AppHeader: React.FC = () => {
       <Flex align="center" justify="center" direction="column">
         <Group>
           <Link href={"/"}>Home</Link>
-          <Link href={"/brand"}>Brand inspirition</Link>
+          {/* <Link href={"/brand"}>Brand inspiration</Link>
+          <Link href={"/japanese"}>Japanese</Link> */}
           <Link href={"/copy-creator"}>Copy creator</Link>
-          <Link href={"/japanese"}>Japanese</Link>
+          <Link href={"/image-descriptor"}>Image descriptor</Link>
         </Group>
         <Title mb="lg">
           <Link href="/">MARVIA AI</Link>

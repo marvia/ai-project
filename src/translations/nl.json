@@ -18,6 +18,13 @@
     },
     "submitButton": "Creëer copy"
   },
+  "imageDescriptor": {
+    "title": "Image descriptor",
+    "image": {
+      "label": "Select an image"
+    },
+    "submitButton": "Describe image"
+  },
   "localeSwitcher": {
     "label": "Taal"
   }

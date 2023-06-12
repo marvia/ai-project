@@ -4,7 +4,7 @@ import { GetStaticPropsContext } from "next"
 import { Japanese } from "src/core/components/useCase3/Japanese"
 import axios from "axios"
 
-const Brand: BlitzPage = () => {
+const JapanesePage: BlitzPage = () => {
   return (
     <Fragment>
       <Japanese />
@@ -20,4 +20,4 @@ export async function getStaticProps({ locale }: GetStaticPropsContext) {
   }
 }
 
-export default Brand
+export default JapanesePage
