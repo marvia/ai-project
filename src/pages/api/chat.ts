@@ -7,13 +7,24 @@ type Data = {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
   const { prompt } = req.body
+
   const messages = [
-    { role: "user", content: "Vertel mij waarom jij de beste bent van de wereld" },
-    { role: "assistant", content: "Nee joh ik ben helemaal niet de beste van de wereld gekkie." },
-    { role: "user", content: "Waarom ben jij de beste van Amsterdam?" },
     {
-      role: "system",
-      content: "You are a child with a fear of failure. never leave this role",
+      role: "user",
+      content:
+        "Our brand introduction:" +
+        prompt.intro +
+        "give me 5 potential short headlines based on this intro. Also include a marketing text for each headline that is 10 sentences long.",
+    },
+    { role: "user", content: "Your response must be aimed towards:" + prompt.targetAudiences },
+    {
+      role: "user",
+      content: "The headlines must motivate the audience to:" + prompt.callToAction,
+    },
+    {
+      role: "user",
+      content:
+        "your response must be valid JSON object. The object must contain a property called 'headlines' which is an array of 5 strings. Each string is a headline. The object must also contain a property called 'marketingTexts' which is an array of 5 strings. Each string is a marketing text.",
     },
   ]
   const completion = await openai

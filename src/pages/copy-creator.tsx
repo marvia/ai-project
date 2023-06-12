@@ -1,7 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import {
+  Badge,
   Button,
   Card,
+  Group,
   MultiSelect,
   Select,
   SelectItem,
@@ -22,6 +24,7 @@ import { GetStaticPropsContext } from "next"
 import axios from "axios"
 import { DEFAULT_PROMPT } from "src/core/copy-creator/constants"
 import { AvailableLocale } from "src/types"
+import { Interface } from "readline"
 
 const lengtSelectData: Array<SelectItem> = [
   { label: "Short", value: "0 - 20" },
@@ -29,8 +32,16 @@ const lengtSelectData: Array<SelectItem> = [
   { label: "Long", value: "100 - 500" },
 ]
 
+interface CopyCreatorResponseType {
+  headlines: Array<string>
+  marketingTexts: Array<string>
+}
+
 function CopyCreator(): JSX.Element {
-  const [result, setResult] = useState<string>("")
+  const [result, setResult] = useState<CopyCreatorResponseType>({
+    headlines: [""],
+    marketingTexts: [""],
+  })
   const [loading, setLoading] = useState<boolean>(false)
   const { classes } = useStyles(undefined, { name: CopyCreator.name })
   const router = useRouter()
@@ -38,6 +49,8 @@ function CopyCreator(): JSX.Element {
   const t = useTranslations("copyCreator")
   const copyCreatorForm = useForm({
     defaultValues: {
+      brandIntro:
+        "We are ViaMar Coffee. A coffee brand that is all about sustainability and fair trade. Our coffee beans are carefully selected and roasted to perfection. Our supply chain is fully transparent to ensure that the farmer gets a fair price for his coffee beans.",
       toneOfVoice: [],
       targetAudiences: [],
       callToAction: "",
@@ -49,20 +62,27 @@ function CopyCreator(): JSX.Element {
   const sendPrompt = async ({ toneOfVoice, targetAudiences, callToAction, copyLength }) => {
     const languageSetting = activeLocale === "en" ? "" : "Respond in Dutch."
 
-    const prompt = `${DEFAULT_PROMPT} \`\`\` Tone of voice: ${toneOfVoice.join(
-      ", "
-    )}. Target audience: ${targetAudiences.join(
-      ", "
-    )}. Length: ${copyLength} words. Call to action: ${callToAction}. \`\`\` ${languageSetting}`
+    // const prompt = `${DEFAULT_PROMPT} \`\`\` Tone of voice: ${toneOfVoice.join(
+    //   ", "
+    // )}. Target audience: ${targetAudiences.join(
+    //   ", "
+    // )}. Length: ${copyLength} words. Call to action: ${callToAction}. \`\`\` ${languageSetting}`
+
+    const prompt = {
+      intro: DEFAULT_PROMPT,
+      toneOfVoice,
+      targetAudiences,
+      copyLength,
+      callToAction,
+      languageSetting,
+    }
 
     try {
       const url = "/api/chat"
 
-      console.log(prompt)
-
       await axios
         .post(url, { prompt })
-        .then((response: { data: string }) => setResult(response.data))
+        .then((response) => setResult(response.data))
         .catch((error) => {
           console.error(error.message)
           throw new Error("FAAAAIIL")
@@ -115,8 +135,23 @@ function CopyCreator(): JSX.Element {
 
       <Stack align="center">
         <form onSubmit={handleSubmit}>
-          <Card shadow="sm" style={{ width: 300 }}>
+          <Card shadow="sm" style={{ width: 500 }}>
             <Stack align="center" mt="xl" spacing="md">
+              <Controller
+                control={copyCreatorForm.control}
+                name="brandIntro"
+                render={({ field, fieldState }) => (
+                  <Textarea
+                    {...field}
+                    label={t("brandIntro.label")}
+                    placeholder={t("brandIntro.placeholder")}
+                    minRows={4}
+                    classNames={{ root: classes.root }}
+                    disabled={loading}
+                    error={fieldState.error && <span>{fieldState.error.message}</span>}
+                  />
+                )}
+              />
               <Controller
                 control={copyCreatorForm.control}
                 name="toneOfVoice"
@@ -133,7 +168,6 @@ function CopyCreator(): JSX.Element {
                   />
                 )}
               />
-
               <Controller
                 control={copyCreatorForm.control}
                 name="targetAudiences"
@@ -150,8 +184,7 @@ function CopyCreator(): JSX.Element {
                   />
                 )}
               />
-
-              <Controller
+              {/* <Controller
                 control={copyCreatorForm.control}
                 name="copyLength"
                 render={({ field, fieldState }) => (
@@ -164,8 +197,7 @@ function CopyCreator(): JSX.Element {
                     error={fieldState.error && <span>{fieldState.error.message}</span>}
                   />
                 )}
-              />
-
+              /> */}
               <Controller
                 control={copyCreatorForm.control}
                 name="callToAction"
@@ -181,15 +213,33 @@ function CopyCreator(): JSX.Element {
                   />
                 )}
               />
-
               <Button mt="md" type="submit" loading={loading} disabled={loading}>
                 ✨ {t("submitButton")} ✨
               </Button>
             </Stack>
           </Card>
         </form>
-        <Card shadow="sm" style={{ width: 300, minHeight: 300 }}>
-          <Text>{result}</Text>
+        <Card shadow="sm" style={{ width: 500, minHeight: 300 }}>
+          <Group>
+            {result.headlines.map((headline, index) => (
+              <Card key={index} shadow="sm" padding="lg" radius="md" withBorder>
+                <Group position="apart" mt="md" mb="xs">
+                  <Text weight={500}>{headline}</Text>
+                  <Badge color="green" variant="light">
+                    Live AI content
+                  </Badge>
+                </Group>
+
+                <Text size="sm" color="dimmed">
+                  {result.marketingTexts[index]}
+                </Text>
+
+                <Button variant="light" color="blue" fullWidth mt="md" radius="md">
+                  Select this article
+                </Button>
+              </Card>
+            ))}
+          </Group>
         </Card>
       </Stack>
     </Layout>

@@ -16,6 +16,10 @@
       "label": "Call to action",
       "placeholder": "What do you want your audience to do?"
     },
+    "brandIntro": {
+      "label": "Brand intro",
+      "placeholder": "Describe your brand."
+    },
     "submitButton": "Create copy"
   },
   "imageDescriptor": {
