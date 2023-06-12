@@ -101,12 +101,10 @@ function ImageDescriptor(): JSX.Element {
     value: item.en,
   }))
 
-  console.log({ result })
-
   const image1 = "https://i.imgur.com/vRq5YWt.png"
 
   const imageApi =
-    "https://alt-text-generator.vercel.app/api/generate?imageUrl=https://i.imgur.com/vRq5YWt.png"
+    "https://ai-alt-text-generator-nu-liard.vercel.app/api/generate?imageUrl=https://i.imgur.com/vRq5YWt.png"
 
   const getImageDescription = async () => {
     try {
@@ -123,6 +121,8 @@ function ImageDescriptor(): JSX.Element {
     }
     setLoading(false)
   }
+
+  console.log(result)
 
   return (
     <Layout title="VIAMAR Image Descriptor">
@@ -143,7 +143,7 @@ function ImageDescriptor(): JSX.Element {
             <Image src={image1} height={500} alt="example 1" />
           </Card.Section>
 
-          <Text size="sm" color="dimmed">
+          <Text mt={10} size="lg" align="center">
             {result}
           </Text>
 
