@@ -219,28 +219,30 @@ function CopyCreator(): JSX.Element {
             </Stack>
           </Card>
         </form>
-        <Card shadow="sm" style={{ width: 500, minHeight: 300 }}>
-          <Group>
-            {result.headlines.map((headline, index) => (
-              <Card key={index} shadow="sm" padding="lg" radius="md" withBorder>
-                <Group position="apart" mt="md" mb="xs">
-                  <Text weight={500}>{headline}</Text>
-                  <Badge color="green" variant="light">
-                    Live AI content
-                  </Badge>
-                </Group>
+        {result.headlines.length > 1 && (
+          <Card shadow="sm" style={{ width: 500, minHeight: 300 }}>
+            <Group>
+              {result.headlines.map((headline, index) => (
+                <Card key={index} shadow="sm" padding="lg" radius="md" withBorder>
+                  <Group position="apart" mt="md" mb="xs">
+                    <Text weight={500}>{headline}</Text>
+                    <Badge color="green" variant="light">
+                      Live AI content
+                    </Badge>
+                  </Group>
 
-                <Text size="sm" color="dimmed">
-                  {result.marketingTexts[index]}
-                </Text>
+                  <Text size="sm" color="dimmed">
+                    {result.marketingTexts[index]}
+                  </Text>
 
-                <Button variant="light" color="blue" fullWidth mt="md" radius="md">
-                  Select this article
-                </Button>
-              </Card>
-            ))}
-          </Group>
-        </Card>
+                  <Button variant="light" color="blue" fullWidth mt="md" radius="md">
+                    Select this article
+                  </Button>
+                </Card>
+              ))}
+            </Group>
+          </Card>
+        )}
       </Stack>
     </Layout>
   )
