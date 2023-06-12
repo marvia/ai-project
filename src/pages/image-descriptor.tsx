@@ -16,7 +16,7 @@ import {
 } from "@mantine/core"
 import { useRouter } from "next/router"
 import { useMemo, useState } from "react"
-import { Controller, useForm } from "react-hook-form"
+import { Controller, set, useForm } from "react-hook-form"
 import { TARGET_AUDIENCES, TONE_OF_VOICE } from "src/core/copy-creator/constants"
 import { CopyCreatorInput } from "src/core/copy-creator/zod"
 import Layout from "src/core/layouts/Layout"
@@ -118,6 +118,7 @@ function ImageDescriptor(): JSX.Element {
   }
 
   const getImageDescription = async () => {
+    setLoading(true)
     try {
       await axios
         .get(imageApi)
@@ -169,6 +170,8 @@ function ImageDescriptor(): JSX.Element {
               mt="md"
               radius="md"
               onClick={uploadImage}
+              disabled={loading}
+              loading={loading}
             >
               Upload image
             </Button>
