@@ -14,7 +14,7 @@ import {
   createStyles,
 } from "@mantine/core"
 import { useRouter } from "next/router"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { TARGET_AUDIENCES, TONE_OF_VOICE } from "src/core/copy-creator/constants"
 import { CopyCreatorInput } from "src/core/copy-creator/zod"
@@ -25,6 +25,7 @@ import axios from "axios"
 import { DEFAULT_PROMPT } from "src/core/copy-creator/constants"
 import { AvailableLocale } from "src/types"
 import { Interface } from "readline"
+import { text } from "stream/consumers"
 
 const lengtSelectData: Array<SelectItem> = [
   { label: "Short", value: "0 - 20" },
@@ -47,6 +48,21 @@ function CopyCreator(): JSX.Element {
   const router = useRouter()
   const activeLocale = router.locale as AvailableLocale
   const t = useTranslations("copyCreator")
+  const [newHeadLine, setNewHeadLine] = useState<string>("")
+  const [initialHeadline, setInitialHeadline] = useState<string | undefined>("")
+  const [formInput, setFormInput] = useState({
+    brandIntro: "",
+    toneOfVoice: [],
+    targetAudiences: [],
+    callToAction: "",
+  })
+
+  useEffect(() => {
+    if (result.headlines.length > 1) {
+      setInitialHeadline(result.headlines[0])
+    }
+  }, [result])
+
   const copyCreatorForm = useForm({
     defaultValues: {
       brandIntro:
@@ -54,12 +70,11 @@ function CopyCreator(): JSX.Element {
       toneOfVoice: [],
       targetAudiences: [],
       callToAction: "",
-      copyLength: "",
     },
     resolver: zodResolver(CopyCreatorInput),
   })
 
-  const sendPrompt = async ({ toneOfVoice, targetAudiences, callToAction, copyLength }) => {
+  const sendPrompt = async ({ toneOfVoice, targetAudiences, callToAction }) => {
     setResult({
       headlines: [""],
       marketingTexts: [""],
@@ -76,7 +91,6 @@ function CopyCreator(): JSX.Element {
       intro: DEFAULT_PROMPT,
       toneOfVoice,
       targetAudiences,
-      copyLength,
       callToAction,
       languageSetting,
     }
@@ -99,6 +113,7 @@ function CopyCreator(): JSX.Element {
   }
 
   const handleSubmit = copyCreatorForm.handleSubmit(async (values) => {
+    setFormInput(values)
     try {
       setLoading(true)
       await sendPrompt(values)
@@ -121,6 +136,38 @@ function CopyCreator(): JSX.Element {
     label: activeLocale === "en" ? item.en : item.nl,
     value: item.en,
   }))
+
+  async function handleRefreshHeading(index) {
+    setLoading(true)
+    try {
+      const url = "/api/hello"
+      const prompt = {
+        toneOfVoice: formInput.toneOfVoice[0],
+        targetAudience: formInput.targetAudiences[0],
+        callToAction: formInput.callToAction,
+        headline: initialHeadline,
+      }
+
+      await axios
+        .post(url, {
+          prompt,
+        })
+        .then((response) => setNewHeadLine(response.data))
+        .then(() => {
+          const newHeadlines = [...result.headlines]
+          newHeadlines[index] = newHeadLine
+          setResult({ ...result, headlines: newHeadlines })
+        })
+        .catch((error) => {
+          console.error(error.message)
+          throw new Error("FAAAAIIL")
+        })
+    } catch (e) {
+      console.error(e.message)
+      throw new Error("FAAAAIIL")
+    }
+    setLoading(false)
+  }
 
   return (
     <Layout title="VIAMAR Copy creator">
@@ -227,7 +274,8 @@ function CopyCreator(): JSX.Element {
               {result.headlines.map((headline, index) => (
                 <Card key={index} shadow="sm" padding="lg" radius="md" withBorder>
                   <Group position="apart" mt="md" mb="xs">
-                    <Text weight={500}>{headline}</Text>
+                    <Text weight={500}>{headline}</Text>{" "}
+                    <Button onClick={() => handleRefreshHeading(index)}>New headline</Button>
                     <Badge color="green" variant="light">
                       Live AI content
                     </Badge>

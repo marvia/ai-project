@@ -24,7 +24,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         "---" +
         prompt.intro +
         "---" +
-        " give me 3 potential short headlines based on the text between trible dashes and the call to action. Include a marketing text for each headline that is 10 sentences long.",
+        " give me 3 potential short headlines based on the text between triple dashes and the call to action. Include a marketing text for each headline that is 10 sentences long.",
     },
     {
       role: "user",
