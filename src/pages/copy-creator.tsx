@@ -60,6 +60,10 @@ function CopyCreator(): JSX.Element {
   })
 
   const sendPrompt = async ({ toneOfVoice, targetAudiences, callToAction, copyLength }) => {
+    setResult({
+      headlines: [""],
+      marketingTexts: [""],
+    })
     const languageSetting = activeLocale === "en" ? "" : "Respond in Dutch."
 
     // const prompt = `${DEFAULT_PROMPT} \`\`\` Tone of voice: ${toneOfVoice.join(
@@ -117,8 +121,6 @@ function CopyCreator(): JSX.Element {
     label: activeLocale === "en" ? item.en : item.nl,
     value: item.en,
   }))
-
-  console.log({ result })
 
   return (
     <Layout title="VIAMAR Copy creator">
