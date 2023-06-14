@@ -60,7 +60,7 @@ function CopyCreator2(): JSX.Element {
         })
         .then(() =>
           axios
-            .post("/api/image", { prompt: "Coffee beans and cup of coffee: " + cta })
+            .post("/api/image", { prompt: "" + cta })
             .then((res) => {
               setResponse2(res.data)
             })
@@ -114,7 +114,7 @@ function CopyCreator2(): JSX.Element {
             {state === "audience" && <Audience setState={setState} setAudience={setAudience} />}
             {state === "style" && <Style setState={setState} setStyle={setStyle} />}
             {state === "generate" && (
-              <GeneratePost setState={setState} loading={loading} text={result} image={response2} />
+              <GeneratePost loading={loading} text={result} image={response2} />
             )}
           </Card.Section>
         </Card>

@@ -21,7 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     {
       role: "user",
       content:
-        " read the text between the dashes and write an instagram post for me. The post should motivate our followers to: " +
+        " read the text between the dashes and write an instagram post for me with the text between the dashes in mind. The post should motivate our followers to: " +
         prompt.callToAction +
         "---We are ViaMar Coffee. A coffee brand that is all about sustainability and fair trade. Our coffee beans are carefully selected and roasted to perfection. Our supply chain is fully transparent to ensure that the farmer gets a fair price for his coffee beans.---",
     },
@@ -31,7 +31,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       content:
         "The post may consist of a maximum of 7 sentences and a minimum of 3 sentences and must contain appropriate hashtags. Also write your post in a " +
         prompt.toneOfVoice +
-        " style",
+        " style. Start directly with the first sentence of the post.",
     },
   ]
   const completion = await openai
