@@ -176,7 +176,7 @@ function CopyCreator(): JSX.Element {
         order={1}
         align="center"
         sx={({ colors }) => ({
-          color: colors.blue[7],
+          color: "#00386b",
         })}
       >
         {t("title")}
@@ -262,7 +262,13 @@ function CopyCreator(): JSX.Element {
                   />
                 )}
               />
-              <Button mt="md" type="submit" loading={loading} disabled={loading}>
+              <Button
+                mt="md"
+                type="submit"
+                loading={loading}
+                disabled={loading}
+                className={classes.button}
+              >
                 ✨ {t("submitButton")} ✨
               </Button>
             </Stack>
@@ -275,7 +281,9 @@ function CopyCreator(): JSX.Element {
                 <Card key={index} shadow="sm" padding="lg" radius="md" withBorder>
                   <Group position="apart" mt="md" mb="xs">
                     <Text weight={500}>{headline}</Text>{" "}
-                    <Button onClick={() => handleRefreshHeading(index)}>New headline</Button>
+                    <Button onClick={() => handleRefreshHeading(index)} className={classes.button}>
+                      New headline
+                    </Button>
                     <Badge color="green" variant="light">
                       Live AI content
                     </Badge>
@@ -300,6 +308,7 @@ function CopyCreator(): JSX.Element {
 
 const useStyles = createStyles(() => ({
   root: { width: "100%" },
+  button: { backgroundColor: "#00386b" },
 }))
 
 export async function getStaticProps({ locale }: GetStaticPropsContext) {
