@@ -42,7 +42,7 @@ const AppHeader: React.FC = () => {
 
 const useStyles = createStyles(({ colors }) => ({
   root: {
-    backgroundColor: colors.blue[7],
+    backgroundColor: "#13b38b",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
