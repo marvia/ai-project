@@ -16,7 +16,7 @@ import {
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
-import { TARGET_AUDIENCES, TONE_OF_VOICE } from "src/core/copy-creator/constants"
+import { BRAND_INTRO, TARGET_AUDIENCES, TONE_OF_VOICE } from "src/core/copy-creator/constants"
 import { CopyCreatorInput } from "src/core/copy-creator/zod"
 import Layout from "src/core/layouts/Layout"
 import { useTranslations } from "next-intl"
@@ -24,8 +24,6 @@ import { GetStaticPropsContext } from "next"
 import axios from "axios"
 import { DEFAULT_PROMPT } from "src/core/copy-creator/constants"
 import { AvailableLocale } from "src/types"
-import { Interface } from "readline"
-import { text } from "stream/consumers"
 
 const lengtSelectData: Array<SelectItem> = [
   { label: "Short", value: "0 - 20" },
@@ -63,10 +61,11 @@ function CopyCreator(): JSX.Element {
     }
   }, [result])
 
+  console.log(initialHeadline)
+
   const copyCreatorForm = useForm({
     defaultValues: {
-      brandIntro:
-        "We are ViaMar Coffee. A coffee brand that is all about sustainability and fair trade. Our coffee beans are carefully selected and roasted to perfection. Our supply chain is fully transparent to ensure that the farmer gets a fair price for his coffee beans.",
+      brandIntro: BRAND_INTRO,
       toneOfVoice: [],
       targetAudiences: [],
       callToAction: "",
@@ -268,13 +267,13 @@ function CopyCreator(): JSX.Element {
             </Stack>
           </Card>
         </form>
-        {result.headlines.length > 1 && (
+        {result.headlines?.length > 1 && (
           <Card shadow="sm" style={{ width: 500, minHeight: 300 }}>
             <Group>
               {result.headlines.map((headline, index) => (
                 <Card key={index} shadow="sm" padding="lg" radius="md" withBorder>
                   <Group position="apart" mt="md" mb="xs">
-                    <Text weight={500}>{headline}</Text>{" "}
+                    <Text weight={500}>{headline}</Text>
                     <Button onClick={() => handleRefreshHeading(index)}>New headline</Button>
                     <Badge color="green" variant="light">
                       Live AI content

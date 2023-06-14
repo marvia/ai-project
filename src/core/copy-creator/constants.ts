@@ -3,6 +3,9 @@ export const VIAMAR_BRAND_IDENTITY =
 
 export const DEFAULT_PROMPT = `${VIAMAR_BRAND_IDENTITY}`
 
+export const BRAND_INTRO =
+  "We are ViaMar Coffee. A coffee brand that is all about sustainability and fair trade. Our coffee beans are carefully selected and roasted to perfection. Our supply chain is fully transparent to ensure that the farmer gets a fair price for his coffee beans."
+
 export const TARGET_AUDIENCES = [
   { en: "Millennials", nl: "Millennials" },
   { en: "Generation Z", nl: "Generatie Z" },
@@ -19,14 +22,11 @@ export const TARGET_AUDIENCES = [
 export const TONE_OF_VOICE = [
   { en: "Formal", nl: "Formeel" },
   { en: "Informal", nl: "Informeel" },
-  { en: "Approachable", nl: "Toegankelijk" },
-  { en: "Professional", nl: "Professioneel" },
   { en: "Friendly", nl: "Vriendelijk" },
   { en: "Funny", nl: "Grappig" },
   { en: "Confident", nl: "Zelfverzekerd" },
   { en: "Inspiring", nl: "Inspirerend" },
   { en: "Witty", nl: "Geestig" },
-  { en: "Approval-seeking", nl: "Bevestiging zoekend" },
   { en: "Thoughtful", nl: "Attent" },
   { en: "Encouraging", nl: "Aanmoedigend" },
   { en: "Informative", nl: "Informatief" },
