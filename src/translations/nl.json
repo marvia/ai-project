@@ -14,6 +14,30 @@
     },
     "submitButton": "Creëer copy"
   },
+
+  "copyCreator2": {
+    "title": "Copy creator 2",
+    "toneOfVoice": {
+      "label": "Select keywords for your tone of voice",
+      "nothingFound": "Nothing found"
+    },
+    "targetAudience": {
+      "label": "Select your target audience",
+      "nothingFound": "Nothing found"
+    },
+    "copyLength": {
+      "label": "Length of copy"
+    },
+    "callToAction": {
+      "label": "Call to action",
+      "placeholder": "What do you want your audience to do?"
+    },
+    "brandIntro": {
+      "label": "Brand intro",
+      "placeholder": "Describe your brand."
+    },
+    "submitButton": "Create copy"
+  },
   "imageDescriptor": {
     "title": "Image descriptor",
     "image": {

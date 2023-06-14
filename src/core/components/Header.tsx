@@ -1,5 +1,5 @@
 import { useRouter } from "next/router"
-import { Flex, Header, Select, Title, createStyles, Group, SelectItem } from "@mantine/core"
+import { Flex, Header, Select, Title, createStyles, Group, SelectItem, Image } from "@mantine/core"
 import Link from "next/link"
 
 const AppHeader: React.FC = () => {
@@ -16,26 +16,38 @@ const AppHeader: React.FC = () => {
     locales?.map((loc: string) => ({ label: loc.toUpperCase(), value: loc })) || []
 
   return (
-    <Header height={150} classNames={{ root: classes.root }}>
+    <Header height={200} classNames={{ root: classes.root }}>
       <Flex align="center" justify="center" direction="column">
-        <Group>
-          <Link href={"/"}>Home</Link>
+        <Title mb="lg">
+          <Link href="/">
+            <Image alt="Logo" src="Marvia_logo_02_RGB White.svg" maw={200}></Image>
+          </Link>
+        </Title>
+        <Group mt="lg">
+          <Link href={"/"} className={classes.link}>
+            Home
+          </Link>
           {/* <Link href={"/brand"}>Brand inspiration</Link>
           <Link href={"/japanese"}>Japanese</Link> */}
-          <Link href={"/copy-creator"}>Copy creator</Link>
-          <Link href={"/image-descriptor"}>Image descriptor</Link>
-        </Group>
-        <Title mb="lg">
-          <Link href="/">MARVIA AI</Link>
-        </Title>
+          <Link href={"/copy-creator"} className={classes.link}>
+            Copy creator
+          </Link>
+          <Link href={"/copy-creator2"} className={classes.link}>
+            Copy creator 2
+          </Link>
+          <Link href={"/image-descriptor"} className={classes.link}>
+            Image descriptor
+          </Link>
 
-        {/* For now we'll only be focussing on English language. If we decide we want to add more languages, we can uncomment this Select input. */}
-        {/* <Select
-          className={classes.localeSwitcher}
-          data={localeOptions}
-          defaultValue={locale}
-          onChange={(e) => e && handleChangeLocale(e)}
-        /> */}
+          {/* For now we'll only be focussing on English language. If we decide we want to add more languages, we can uncomment this Select input. */}
+          {/* <Select
+            className={classes.localeSwitcher}
+            data={localeOptions}
+            defaultValue={locale}
+            onChange={(e) => e && handleChangeLocale(e)}
+            size="xs"
+          /> */}
+        </Group>
       </Flex>
     </Header>
   )
@@ -47,6 +59,10 @@ const useStyles = createStyles(({ colors }) => ({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+  },
+
+  link: {
+    color: "white",
   },
 
   localeSwitcher: {

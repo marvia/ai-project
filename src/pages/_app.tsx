@@ -35,7 +35,20 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <NextIntlProvider messages={messages}>
       <ErrorBoundary FallbackComponent={RootErrorFallback}>
-        <MantineProvider withGlobalStyles withNormalizeCSS>
+        <MantineProvider
+          inherit
+          theme={{
+            components: {
+              InputWrapper: {
+                styles: (theme) => ({}),
+              },
+
+              Input: {
+                styles: (theme) => ({}),
+              },
+            },
+          }}
+        >
           {getLayout(<Component {...pageProps} />)}
         </MantineProvider>
       </ErrorBoundary>
