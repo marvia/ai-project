@@ -25,12 +25,6 @@ import axios from "axios"
 import { DEFAULT_PROMPT } from "src/core/copy-creator/constants"
 import { AvailableLocale } from "src/types"
 
-const lengtSelectData: Array<SelectItem> = [
-  { label: "Short", value: "0 - 20" },
-  { label: "Medium", value: "20 - 100" },
-  { label: "Long", value: "100 - 500" },
-]
-
 interface CopyCreatorResponseType {
   headlines: Array<string>
   marketingTexts: Array<string>
@@ -50,8 +44,8 @@ function CopyCreator(): JSX.Element {
   const [initialHeadline, setInitialHeadline] = useState<string | undefined>("")
   const [formInput, setFormInput] = useState({
     brandIntro: "",
-    toneOfVoice: [],
-    targetAudiences: [],
+    toneOfVoice: "",
+    targetAudiences: "",
     callToAction: "",
   })
 
@@ -61,13 +55,11 @@ function CopyCreator(): JSX.Element {
     }
   }, [result])
 
-  console.log(initialHeadline)
-
   const copyCreatorForm = useForm({
     defaultValues: {
       brandIntro: BRAND_INTRO,
-      toneOfVoice: [],
-      targetAudiences: [],
+      toneOfVoice: "",
+      targetAudiences: "",
       callToAction: "",
     },
     resolver: zodResolver(CopyCreatorInput),
@@ -79,12 +71,6 @@ function CopyCreator(): JSX.Element {
       marketingTexts: [""],
     })
     const languageSetting = activeLocale === "en" ? "" : "Respond in Dutch."
-
-    // const prompt = `${DEFAULT_PROMPT} \`\`\` Tone of voice: ${toneOfVoice.join(
-    //   ", "
-    // )}. Target audience: ${targetAudiences.join(
-    //   ", "
-    // )}. Length: ${copyLength} words. Call to action: ${callToAction}. \`\`\` ${languageSetting}`
 
     const prompt = {
       intro: DEFAULT_PROMPT,
@@ -141,8 +127,8 @@ function CopyCreator(): JSX.Element {
     try {
       const url = "/api/hello"
       const prompt = {
-        toneOfVoice: formInput.toneOfVoice[0],
-        targetAudience: formInput.targetAudiences[0],
+        toneOfVoice: formInput.toneOfVoice,
+        targetAudience: formInput.targetAudiences,
         callToAction: formInput.callToAction,
         headline: initialHeadline,
       }
@@ -204,12 +190,10 @@ function CopyCreator(): JSX.Element {
                 control={copyCreatorForm.control}
                 name="toneOfVoice"
                 render={({ field, fieldState }) => (
-                  <MultiSelect
+                  <Select
                     {...field}
                     data={toneOfVoiceSelectData}
                     label={t("toneOfVoice.label")}
-                    searchable
-                    nothingFound={t("toneOfVoice.nothingFound")}
                     classNames={{ root: classes.root }}
                     disabled={loading}
                     error={fieldState.error && <span>{fieldState.error.message}</span>}
@@ -220,32 +204,17 @@ function CopyCreator(): JSX.Element {
                 control={copyCreatorForm.control}
                 name="targetAudiences"
                 render={({ field, fieldState }) => (
-                  <MultiSelect
+                  <Select
                     {...field}
                     data={targetAudiencesSelectData}
                     label={t("targetAudience.label")}
-                    searchable
-                    nothingFound={t("targetAudience.nothingFound")}
                     classNames={{ root: classes.root }}
                     disabled={loading}
                     error={fieldState.error && <span>{fieldState.error.message}</span>}
                   />
                 )}
               />
-              {/* <Controller
-                control={copyCreatorForm.control}
-                name="copyLength"
-                render={({ field, fieldState }) => (
-                  <Select
-                    {...field}
-                    data={lengtSelectData}
-                    label={t("copyLength.label")}
-                    classNames={{ root: classes.root }}
-                    disabled={loading}
-                    error={fieldState.error && <span>{fieldState.error.message}</span>}
-                  />
-                )}
-              /> */}
+
               <Controller
                 control={copyCreatorForm.control}
                 name="callToAction"
