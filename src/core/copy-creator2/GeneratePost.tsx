@@ -68,6 +68,11 @@ function GeneratePost({ setState, text, image, loading }): JSX.Element {
             Taking a break...
           </Text>
         )}
+        {count === 6 && (
+          <Text size={"xl"} color="white" weight={700}>
+            Taking a nap...
+          </Text>
+        )}
       </Center>
     </Card>
   )
