@@ -4,7 +4,6 @@ import {
   Button,
   Card,
   Group,
-  MultiSelect,
   Select,
   SelectItem,
   Stack,
@@ -133,25 +132,21 @@ function CopyCreator(): JSX.Element {
         headline: initialHeadline,
       }
 
-      await axios
-        .post(url, {
-          prompt,
+      await axios.post(url, { prompt }).then((response) => {
+        setNewHeadLine(response.data)
+
+        setResult((prevResult) => {
+          const newHeadlines = [...prevResult.headlines]
+          newHeadlines[index] = response.data
+          return { ...prevResult, headlines: newHeadlines }
         })
-        .then((response) => setNewHeadLine(response.data))
-        .then(() => {
-          const newHeadlines = [...result.headlines]
-          newHeadlines[index] = newHeadLine
-          setResult({ ...result, headlines: newHeadlines })
-        })
-        .catch((error) => {
-          console.error(error.message)
-          throw new Error("FAAAAIIL")
-        })
-    } catch (e) {
-      console.error(e.message)
+      })
+    } catch (error) {
+      console.error(error.message)
       throw new Error("FAAAAIIL")
+    } finally {
+      setLoading(false)
     }
-    setLoading(false)
   }
 
   return (
@@ -243,7 +238,7 @@ function CopyCreator(): JSX.Element {
                 <Card key={index} shadow="sm" padding="lg" radius="md" withBorder>
                   <Group position="apart" mt="md" mb="xs">
                     <Text weight={500}>{headline}</Text>
-                    <Button onClick={() => handleRefreshHeading(index)}>New headline</Button>
+                    <Button onClick={(e) => handleRefreshHeading(index)}>New headline</Button>
                     <Badge color="green" variant="light">
                       Live AI content
                     </Badge>
