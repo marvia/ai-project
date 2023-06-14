@@ -12,7 +12,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     {
       role: "system",
       content:
-        "You are a marketeer who knows how to talk to " +
+        "You are a content marketeer who knows how to talk to " +
         prompt.targetAudiences +
         " in an " +
         prompt.toneOfVoice +
@@ -28,7 +28,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     },
     {
       role: "user",
-      content: "your headlines and texts must motivate to: " + prompt.callToAction,
+      content:
+        "your headlines and texts must motivate to execute this call to action: " +
+        prompt.callToAction,
     },
     {
       role: "user",

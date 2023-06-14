@@ -4,6 +4,7 @@ import {
   Button,
   Card,
   Group,
+  LoadingOverlay,
   Select,
   SelectItem,
   Stack,
@@ -13,7 +14,7 @@ import {
   createStyles,
 } from "@mantine/core"
 import { useRouter } from "next/router"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { BRAND_INTRO, TARGET_AUDIENCES, TONE_OF_VOICE } from "src/core/copy-creator/constants"
 import { CopyCreatorInput } from "src/core/copy-creator/zod"
@@ -48,12 +49,6 @@ function CopyCreator(): JSX.Element {
     callToAction: "",
   })
 
-  useEffect(() => {
-    if (result.headlines.length > 1) {
-      setInitialHeadline(result.headlines[0])
-    }
-  }, [result])
-
   const copyCreatorForm = useForm({
     defaultValues: {
       brandIntro: BRAND_INTRO,
@@ -64,19 +59,20 @@ function CopyCreator(): JSX.Element {
     resolver: zodResolver(CopyCreatorInput),
   })
 
-  const sendPrompt = async ({ toneOfVoice, targetAudiences, callToAction }) => {
+  const sendPrompt = async ({ toneOfVoice, targetAudiences, callToAction, brandIntro }) => {
     setResult({
       headlines: [""],
       marketingTexts: [""],
     })
-    const languageSetting = activeLocale === "en" ? "" : "Respond in Dutch."
+
+    // Not using this for now, but we might want to add this later.
+    // const languageSetting = activeLocale === "en" ? "" : "Respond in Dutch."
 
     const prompt = {
-      intro: DEFAULT_PROMPT,
+      intro: brandIntro,
       toneOfVoice,
       targetAudiences,
       callToAction,
-      languageSetting,
     }
 
     try {
@@ -130,6 +126,7 @@ function CopyCreator(): JSX.Element {
         targetAudience: formInput.targetAudiences,
         callToAction: formInput.callToAction,
         headline: initialHeadline,
+        intro: formInput.brandIntro,
       }
 
       await axios.post(url, { prompt }).then((response) => {
@@ -151,14 +148,7 @@ function CopyCreator(): JSX.Element {
 
   return (
     <Layout title="VIAMAR Copy creator">
-      <Title
-        mt="md"
-        order={1}
-        align="center"
-        sx={({ colors }) => ({
-          color: "#00386b",
-        })}
-      >
+      <Title mt="md" order={1} align="center" style={{ color: "#00386b" }}>
         {t("title")}
       </Title>
 
@@ -243,8 +233,16 @@ function CopyCreator(): JSX.Element {
               {result.headlines.map((headline, index) => (
                 <Card key={index} shadow="sm" padding="lg" radius="md" withBorder>
                   <Group position="apart" mt="md" mb="xs">
-                    <Text weight={500}>{headline}</Text>
-                    <Button onClick={(e) => handleRefreshHeading(index)} className={classes.button}>
+                    <Text weight={500} pos="relative">
+                      <LoadingOverlay visible={loading} overlayBlur={2} />
+                      {headline}
+                    </Text>
+                    <Button
+                      onClick={() => handleRefreshHeading(index)}
+                      className={classes.button}
+                      loading={loading}
+                      disabled={loading}
+                    >
                       New headline
                     </Button>
                     <Badge color="green" variant="light">
