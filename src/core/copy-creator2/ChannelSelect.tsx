@@ -1,40 +1,13 @@
-import { C } from "@blitzjs/auth/dist/index-cd820427"
-import { zodResolver } from "@hookform/resolvers/zod"
-import {
-  Card,
-  Center,
-  SimpleGrid,
-  Image,
-  Group,
-  Text,
-  Badge,
-  Button,
-  createStyles,
-  Anchor,
-  rem,
-  UnstyledButton,
-} from "@mantine/core"
-import { useRouter } from "next/router"
-import {
-  IconCreditCard,
-  IconBuildingBank,
-  IconRepeat,
-  IconReceiptRefund,
-  IconReceipt,
-  IconReceiptTax,
-  IconReport,
-  IconCashBanknote,
-  IconCoin,
-  IconBrandInstagram,
-} from "@tabler/icons-react"
+import { Center, SimpleGrid, Text, createStyles, rem, UnstyledButton } from "@mantine/core"
+
+import { IconBrandInstagram } from "@tabler/icons-react"
 
 const mockdata = [
   { title: "Instagram post", icon: IconBrandInstagram, color: "violet", state: "instagram" },
-  // { title: "Banks nearby", icon: IconBuildingBank, color: "indigo" },
 ]
 
 function ChannelSelect({ setState }): JSX.Element {
-  const { classes, theme } = useStyles(undefined, { name: ChannelSelect.name })
+  const { classes } = useStyles(undefined, { name: ChannelSelect.name })
 
   const items = mockdata.map((item) => (
     <UnstyledButton key={item.title} className={classes.item} onClick={() => setState(item.state)}>

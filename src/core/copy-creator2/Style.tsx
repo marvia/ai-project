@@ -1,40 +1,17 @@
-import { C } from "@blitzjs/auth/dist/index-cd820427"
-import { zodResolver } from "@hookform/resolvers/zod"
 import {
-  Card,
   Center,
-  SimpleGrid,
-  Image,
-  Group,
   Text,
-  Badge,
-  Button,
   createStyles,
-  Anchor,
   rem,
   UnstyledButton,
-  Input,
   Stack,
   Title,
   TextInput,
 } from "@mantine/core"
-import { useRouter } from "next/router"
-import {
-  IconCreditCard,
-  IconBuildingBank,
-  IconRepeat,
-  IconReceiptRefund,
-  IconReceipt,
-  IconReceiptTax,
-  IconReport,
-  IconCashBanknote,
-  IconCoin,
-  IconBrandInstagram,
-} from "@tabler/icons-react"
 import { useState } from "react"
 
 function Style({ setState, setStyle }): JSX.Element {
-  const { classes, theme } = useStyles(undefined, { name: Style.name })
+  const { classes } = useStyles(undefined, { name: Style.name })
   const [inputValue, setInputValue] = useState("")
 
   const handleKeyDown = (event) => {

@@ -1,39 +1,15 @@
-import { zodResolver } from "@hookform/resolvers/zod"
-import {
-  Badge,
-  Button,
-  Card,
-  Center,
-  Group,
-  MultiSelect,
-  Select,
-  SelectItem,
-  Stack,
-  Text,
-  Textarea,
-  Title,
-  createStyles,
-} from "@mantine/core"
-import { useRouter } from "next/router"
-import { useEffect, useState } from "react"
-import { Controller, set, useForm } from "react-hook-form"
-import { TARGET_AUDIENCES, TONE_OF_VOICE } from "src/core/copy-creator/constants"
-import { CopyCreatorInput } from "src/core/copy-creator/zod"
+import { Button, Card, SelectItem, Stack, createStyles } from "@mantine/core"
+import { useState } from "react"
 import Layout from "src/core/layouts/Layout"
 import { useTranslations } from "next-intl"
 import { GetStaticPropsContext } from "next"
 import axios from "axios"
 import { DEFAULT_PROMPT } from "src/core/copy-creator/constants"
-import { AvailableLocale } from "src/types"
-import { Interface } from "readline"
-import { text } from "stream/consumers"
 import ChannelSelect from "src/core/copy-creator2/ChannelSelect"
 import Instagram from "src/core/copy-creator2/Instagram"
-import Link from "next/link"
 import { IconHome2 } from "@tabler/icons-react"
 import Audience from "src/core/copy-creator2/Audience"
 import Style from "src/core/copy-creator2/Style"
-import ImageSelect from "src/core/copy-creator2/ImageSelect"
 import GeneratePost from "src/core/copy-creator2/GeneratePost"
 
 interface Response2Object {
