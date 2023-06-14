@@ -31,7 +31,6 @@ function GeneratePost({ setState, text, image, loading }): JSX.Element {
       } else {
         setCount(0)
       }
-      console.log(count)
     }, 2000)
     return () => clearTimeout(timer)
   }, [count])
