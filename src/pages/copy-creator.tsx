@@ -4,7 +4,6 @@ import {
   Button,
   Card,
   Group,
-  MultiSelect,
   Select,
   SelectItem,
   Stack,
@@ -16,7 +15,7 @@ import {
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
-import { TARGET_AUDIENCES, TONE_OF_VOICE } from "src/core/copy-creator/constants"
+import { BRAND_INTRO, TARGET_AUDIENCES, TONE_OF_VOICE } from "src/core/copy-creator/constants"
 import { CopyCreatorInput } from "src/core/copy-creator/zod"
 import Layout from "src/core/layouts/Layout"
 import { useTranslations } from "next-intl"
@@ -24,14 +23,6 @@ import { GetStaticPropsContext } from "next"
 import axios from "axios"
 import { DEFAULT_PROMPT } from "src/core/copy-creator/constants"
 import { AvailableLocale } from "src/types"
-import { Interface } from "readline"
-import { text } from "stream/consumers"
-
-const lengtSelectData: Array<SelectItem> = [
-  { label: "Short", value: "0 - 20" },
-  { label: "Medium", value: "20 - 100" },
-  { label: "Long", value: "100 - 500" },
-]
 
 interface CopyCreatorResponseType {
   headlines: Array<string>
@@ -52,8 +43,8 @@ function CopyCreator(): JSX.Element {
   const [initialHeadline, setInitialHeadline] = useState<string | undefined>("")
   const [formInput, setFormInput] = useState({
     brandIntro: "",
-    toneOfVoice: [],
-    targetAudiences: [],
+    toneOfVoice: "",
+    targetAudiences: "",
     callToAction: "",
   })
 
@@ -65,10 +56,9 @@ function CopyCreator(): JSX.Element {
 
   const copyCreatorForm = useForm({
     defaultValues: {
-      brandIntro:
-        "We are ViaMar Coffee. A coffee brand that is all about sustainability and fair trade. Our coffee beans are carefully selected and roasted to perfection. Our supply chain is fully transparent to ensure that the farmer gets a fair price for his coffee beans.",
-      toneOfVoice: [],
-      targetAudiences: [],
+      brandIntro: BRAND_INTRO,
+      toneOfVoice: "",
+      targetAudiences: "",
       callToAction: "",
     },
     resolver: zodResolver(CopyCreatorInput),
@@ -80,12 +70,6 @@ function CopyCreator(): JSX.Element {
       marketingTexts: [""],
     })
     const languageSetting = activeLocale === "en" ? "" : "Respond in Dutch."
-
-    // const prompt = `${DEFAULT_PROMPT} \`\`\` Tone of voice: ${toneOfVoice.join(
-    //   ", "
-    // )}. Target audience: ${targetAudiences.join(
-    //   ", "
-    // )}. Length: ${copyLength} words. Call to action: ${callToAction}. \`\`\` ${languageSetting}`
 
     const prompt = {
       intro: DEFAULT_PROMPT,
@@ -142,31 +126,27 @@ function CopyCreator(): JSX.Element {
     try {
       const url = "/api/hello"
       const prompt = {
-        toneOfVoice: formInput.toneOfVoice[0],
-        targetAudience: formInput.targetAudiences[0],
+        toneOfVoice: formInput.toneOfVoice,
+        targetAudience: formInput.targetAudiences,
         callToAction: formInput.callToAction,
         headline: initialHeadline,
       }
 
-      await axios
-        .post(url, {
-          prompt,
+      await axios.post(url, { prompt }).then((response) => {
+        setNewHeadLine(response.data)
+
+        setResult((prevResult) => {
+          const newHeadlines = [...prevResult.headlines]
+          newHeadlines[index] = response.data
+          return { ...prevResult, headlines: newHeadlines }
         })
-        .then((response) => setNewHeadLine(response.data))
-        .then(() => {
-          const newHeadlines = [...result.headlines]
-          newHeadlines[index] = newHeadLine
-          setResult({ ...result, headlines: newHeadlines })
-        })
-        .catch((error) => {
-          console.error(error.message)
-          throw new Error("FAAAAIIL")
-        })
-    } catch (e) {
-      console.error(e.message)
+      })
+    } catch (error) {
+      console.error(error.message)
       throw new Error("FAAAAIIL")
+    } finally {
+      setLoading(false)
     }
-    setLoading(false)
   }
 
   return (
@@ -205,12 +185,10 @@ function CopyCreator(): JSX.Element {
                 control={copyCreatorForm.control}
                 name="toneOfVoice"
                 render={({ field, fieldState }) => (
-                  <MultiSelect
+                  <Select
                     {...field}
                     data={toneOfVoiceSelectData}
                     label={t("toneOfVoice.label")}
-                    searchable
-                    nothingFound={t("toneOfVoice.nothingFound")}
                     classNames={{ root: classes.root }}
                     disabled={loading}
                     error={fieldState.error && <span>{fieldState.error.message}</span>}
@@ -221,32 +199,17 @@ function CopyCreator(): JSX.Element {
                 control={copyCreatorForm.control}
                 name="targetAudiences"
                 render={({ field, fieldState }) => (
-                  <MultiSelect
+                  <Select
                     {...field}
                     data={targetAudiencesSelectData}
                     label={t("targetAudience.label")}
-                    searchable
-                    nothingFound={t("targetAudience.nothingFound")}
                     classNames={{ root: classes.root }}
                     disabled={loading}
                     error={fieldState.error && <span>{fieldState.error.message}</span>}
                   />
                 )}
               />
-              {/* <Controller
-                control={copyCreatorForm.control}
-                name="copyLength"
-                render={({ field, fieldState }) => (
-                  <Select
-                    {...field}
-                    data={lengtSelectData}
-                    label={t("copyLength.label")}
-                    classNames={{ root: classes.root }}
-                    disabled={loading}
-                    error={fieldState.error && <span>{fieldState.error.message}</span>}
-                  />
-                )}
-              /> */}
+
               <Controller
                 control={copyCreatorForm.control}
                 name="callToAction"
@@ -274,14 +237,14 @@ function CopyCreator(): JSX.Element {
             </Stack>
           </Card>
         </form>
-        {result.headlines.length > 1 && (
+        {result.headlines?.length > 1 && (
           <Card shadow="sm" style={{ width: 500, minHeight: 300 }}>
             <Group>
               {result.headlines.map((headline, index) => (
                 <Card key={index} shadow="sm" padding="lg" radius="md" withBorder>
                   <Group position="apart" mt="md" mb="xs">
-                    <Text weight={500}>{headline}</Text>{" "}
-                    <Button onClick={() => handleRefreshHeading(index)} className={classes.button}>
+                    <Text weight={500}>{headline}</Text>
+                    <Button onClick={(e) => handleRefreshHeading(index)} className={classes.button}>
                       New headline
                     </Button>
                     <Badge color="green" variant="light">

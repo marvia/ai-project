@@ -2,16 +2,12 @@
   "copyCreator": {
     "title": "Copy creator",
     "toneOfVoice": {
-      "label": "Selecteer trefwoorden voor de tone of voice",
-      "nothingFound": "Niets gevonden"
+      "label": "Selecteer een trefwoord voor de tone of voice"
     },
     "targetAudience": {
-      "label": "Selecteer je doelgroep",
-      "nothingFound": "Niets gevonden"
+      "label": "Selecteer je doelgroep"
     },
-    "copyLength": {
-      "label": "Copy lengte"
-    },
+
     "callToAction": {
       "label": "Call to action",
       "placeholder": "Wat wil je dat je doelgroep doet?"

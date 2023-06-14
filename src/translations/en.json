@@ -2,15 +2,10 @@
   "copyCreator": {
     "title": "Copy creator",
     "toneOfVoice": {
-      "label": "Select keywords for your tone of voice",
-      "nothingFound": "Nothing found"
+      "label": "Select a keyword for your tone of voice"
     },
     "targetAudience": {
-      "label": "Select your target audience",
-      "nothingFound": "Nothing found"
-    },
-    "copyLength": {
-      "label": "Length of copy"
+      "label": "Select your target audience"
     },
     "callToAction": {
       "label": "Call to action",
