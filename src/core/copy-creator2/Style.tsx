@@ -38,8 +38,10 @@ function Style({ setState, setStyle }): JSX.Element {
   const [inputValue, setInputValue] = useState("")
 
   const handleKeyDown = (event) => {
+    if (!inputValue) return
     if (event.key === "Enter") {
-      setState("imageselect")
+      setState("generate")
+      setStyle(inputValue)
     }
   }
 

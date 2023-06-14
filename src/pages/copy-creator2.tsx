@@ -16,7 +16,7 @@ import {
 } from "@mantine/core"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
-import { Controller, useForm } from "react-hook-form"
+import { Controller, set, useForm } from "react-hook-form"
 import { TARGET_AUDIENCES, TONE_OF_VOICE } from "src/core/copy-creator/constants"
 import { CopyCreatorInput } from "src/core/copy-creator/zod"
 import Layout from "src/core/layouts/Layout"
@@ -34,6 +34,13 @@ import { IconHome2 } from "@tabler/icons-react"
 import Audience from "src/core/copy-creator2/Audience"
 import Style from "src/core/copy-creator2/Style"
 import ImageSelect from "src/core/copy-creator2/ImageSelect"
+import GeneratePost from "src/core/copy-creator2/GeneratePost"
+
+interface Response2Object {
+  url: string
+}
+
+interface Response2 extends Array<Response2Object> {}
 
 const lengtSelectData: Array<SelectItem> = [
   { label: "Short", value: "0 - 20" },
@@ -54,6 +61,48 @@ function CopyCreator2(): JSX.Element {
   const [cta, setCTA] = useState("")
   const [audience, setAudience] = useState("")
   const [style, setStyle] = useState("")
+  const [loading, setLoading] = useState(true)
+  const [result, setResult] = useState<CopyCreatorResponseType>()
+  const [response2, setResponse2] = useState<Response2>([{ url: "" }])
+
+  const prompt = {
+    intro: DEFAULT_PROMPT,
+    toneOfVoice: style,
+    targetAudiences: audience,
+    callToAction: cta,
+  }
+
+  if (style) {
+    try {
+      const url = "/api/cc2"
+
+      axios
+        .post(url, { prompt })
+        .then((response) => {
+          setResult(response.data)
+          setStyle("")
+        })
+        .then(() =>
+          axios
+            .post("/api/image", { prompt: "Coffee beans and cup of coffee: " + cta })
+            .then((res) => {
+              setResponse2(res.data)
+            })
+            .catch(function (error) {
+              console.log(error)
+            })
+        )
+        .then(() => setLoading(false))
+        .then(() => setStyle(""))
+        .catch((error) => {
+          console.error(error.message)
+          throw new Error("FAAAAIIL")
+        })
+    } catch (e) {
+      console.error(e.message)
+      throw new Error("FAAAAIIL")
+    }
+  }
 
   return (
     <Layout title="VIAMAR Copy creator">
@@ -64,7 +113,7 @@ function CopyCreator2(): JSX.Element {
           radius="md"
           withBorder
           miw={1000}
-          mih={600}
+          mih={700}
           className={classes.canvas}
           mt={"lg"}
         >
@@ -73,7 +122,13 @@ function CopyCreator2(): JSX.Element {
               className={classes.button}
               variant="subtle"
               color="blue"
-              onClick={() => setState("start")}
+              onClick={() => {
+                setState("start")
+                setResponse2([{ url: "" }])
+                setResult(undefined)
+                setLoading(true)
+                setStyle("")
+              }}
             >
               <IconHome2 />
             </Button>
@@ -82,7 +137,9 @@ function CopyCreator2(): JSX.Element {
             {state === "instagram" && <Instagram setState={setState} setCTA={setCTA} />}
             {state === "audience" && <Audience setState={setState} setAudience={setAudience} />}
             {state === "style" && <Style setState={setState} setStyle={setStyle} />}
-            {state === "imageselect" && <ImageSelect setState={setState} />}
+            {state === "generate" && (
+              <GeneratePost setState={setState} loading={loading} text={result} image={response2} />
+            )}
           </Card.Section>
         </Card>
       </Stack>
