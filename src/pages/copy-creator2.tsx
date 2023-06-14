@@ -114,7 +114,7 @@ function CopyCreator2(): JSX.Element {
             {state === "audience" && <Audience setState={setState} setAudience={setAudience} />}
             {state === "style" && <Style setState={setState} setStyle={setStyle} />}
             {state === "generate" && (
-              <GeneratePost setState={setState} loading={loading} text={result} image={response2} />
+              <GeneratePost loading={loading} text={result} image={response2} />
             )}
           </Card.Section>
         </Card>

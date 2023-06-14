@@ -1,27 +1,15 @@
-import {
-  Card,
-  Center,
-  Image,
-  Group,
-  Text,
-  createStyles,
-  rem,
-  Menu,
-  ActionIcon,
-  Skeleton,
-} from "@mantine/core"
+import { Card, Center, Image, Group, Text, rem, Menu, ActionIcon } from "@mantine/core"
 import {
   IconDotsVertical,
   IconFileZip,
   IconEye,
-  IconTrash,
   IconHeart,
   IconAt,
   IconArrowUpRightCircle,
 } from "@tabler/icons-react"
 import { useEffect, useState } from "react"
 
-function GeneratePost({ setState, text, image, loading }): JSX.Element {
+function GeneratePost({ text, image, loading }): JSX.Element {
   const [count, setCount] = useState(0)
 
   useEffect(() => {
