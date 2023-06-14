@@ -29,12 +29,13 @@ const AppHeader: React.FC = () => {
           <Link href="/">MARVIA AI</Link>
         </Title>
 
-        <Select
+        {/* For now we'll only be focussing on English language. If we decide we want to add more languages, we can uncomment this Select input. */}
+        {/* <Select
           className={classes.localeSwitcher}
           data={localeOptions}
           defaultValue={locale}
           onChange={(e) => e && handleChangeLocale(e)}
-        />
+        /> */}
       </Flex>
     </Header>
   )
