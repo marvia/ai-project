@@ -42,7 +42,11 @@ function CopyCreator(): JSX.Element {
   const router = useRouter()
   const activeLocale = router.locale as AvailableLocale
   const t = useTranslations("copyCreator")
-  const [opened, { open, close }] = useDisclosure(false)
+  const [modals, setModals] = useState([
+    { id: 0, isOpen: false, disclosure: useDisclosure(false) },
+    { id: 1, isOpen: false, disclosure: useDisclosure(false) },
+    { id: 2, isOpen: false, disclosure: useDisclosure(false) },
+  ])
 
   const [formInput, setFormInput] = useState({
     brandIntro: "",
@@ -92,6 +96,20 @@ function CopyCreator(): JSX.Element {
       throw new Error("FAAAAIIL")
     }
     setLoading(false)
+  }
+
+  const handleOpenModal = (id) => {
+    const updatedModals = modals.map((modal) =>
+      modal.id === id ? { ...modal, isOpen: true } : modal
+    )
+    setModals(updatedModals)
+  }
+
+  const handleCloseModal = (id) => {
+    const updatedModals = modals.map((modal) =>
+      modal.id === id ? { ...modal, isOpen: false } : modal
+    )
+    setModals(updatedModals)
   }
 
   const handleSubmit = copyCreatorForm.handleSubmit(async (values) => {
@@ -254,12 +272,19 @@ function CopyCreator(): JSX.Element {
                   </Text>
 
                   <ChannelSelectionModal
-                    opened={opened}
-                    close={close}
+                    opened={modals[index]?.isOpen}
+                    close={() => handleCloseModal(index)}
                     content={result.marketingTexts[index] || ""}
                   />
 
-                  <Button variant="light" color="blue" fullWidth mt="md" radius="md" onClick={open}>
+                  <Button
+                    variant="light"
+                    color="blue"
+                    fullWidth
+                    mt="md"
+                    radius="md"
+                    onClick={() => handleOpenModal(index)}
+                  >
                     Select a channel for this content
                   </Button>
                 </Card>
