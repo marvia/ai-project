@@ -73,27 +73,28 @@ function ChannelSelectionModal({
       classNames={{ body: classes.modalBody }}
       size="md"
     >
-      <form onSubmit={handleSubmit}>
-        <Stack style={{ minHeight: 300 }} justify="space-between">
-          <Controller
-            control={channelSelectionForm.control}
-            name="channel"
-            render={({ field, fieldState }) => (
-              <Select
-                {...field}
+      {!result && (
+        <form onSubmit={handleSubmit}>
+          <Stack style={{ minHeight: 300 }} justify="space-between">
+            <Controller
+              control={channelSelectionForm.control}
+              name="channel"
+              render={({ field, fieldState }) => (
+                <Select
+                  {...field}
                   onBlur={() => setChannel(field.value)}
-                data={channelOptions}
-                label="Social media channel"
-                classNames={{ root: classes.root }}
-                disabled={loading}
-                error={fieldState.error && <span>{fieldState.error.message}</span>}
-              />
-            )}
-          />
-          <Title order={5} align="center" style={{ color: "#00386b" }}>
-            {contentTitle}
-          </Title>
-          <Text>{content}</Text>
+                  data={channelOptions}
+                  label="Social media channel"
+                  classNames={{ root: classes.root }}
+                  disabled={loading}
+                  error={fieldState.error && <span>{fieldState.error.message}</span>}
+                />
+              )}
+            />
+            <Title order={5} align="center" style={{ color: "#00386b" }}>
+              {contentTitle}
+            </Title>
+            <Text>{content}</Text>
 
             <Button
               mt="md"
