@@ -37,8 +37,6 @@ function ChannelSelectionModal({
     resolver: zodResolver(ChannelSelectorInput),
   })
 
-  console.log({ contentTitle })
-
   const handleSubmit = channelSelectionForm.handleSubmit(async (values) => {
     //TODO: send prompt to backend and create endpoint
     const url = "/api/channel-selector"
