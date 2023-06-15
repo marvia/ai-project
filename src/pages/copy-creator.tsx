@@ -198,6 +198,7 @@ function CopyCreator(): JSX.Element {
                     label={t("toneOfVoice.label")}
                     classNames={{ root: classes.root }}
                     disabled={loading}
+                    required
                     error={fieldState.error && <span>{fieldState.error.message}</span>}
                   />
                 )}
@@ -212,6 +213,7 @@ function CopyCreator(): JSX.Element {
                     label={t("targetAudience.label")}
                     classNames={{ root: classes.root }}
                     disabled={loading}
+                    required
                     error={fieldState.error && <span>{fieldState.error.message}</span>}
                   />
                 )}
@@ -226,6 +228,7 @@ function CopyCreator(): JSX.Element {
                     label={t("callToAction.label")}
                     placeholder={t("callToAction.placeholder")}
                     minRows={4}
+                    required
                     classNames={{ root: classes.root }}
                     disabled={loading}
                     error={fieldState.error && <span>{fieldState.error.message}</span>}
@@ -245,49 +248,58 @@ function CopyCreator(): JSX.Element {
           </Card>
         </form>
         {result.headlines?.length > 1 && (
-          <Card shadow="sm" style={{ width: 500, minHeight: 300 }}>
+          <Card shadow="sm" style={{ width: 1250, minHeight: 300 }} pb={"xl"}>
             <Group>
               {result.headlines.map((headline, index) => (
-                <Card key={index} shadow="sm" padding="lg" radius="md" withBorder>
-                  <Group position="apart" mt="md" mb="xs">
-                    <Text weight={500} pos="relative">
-                      <LoadingOverlay visible={loading} overlayBlur={2} />
-                      {headline}
+                <Card
+                  key={index}
+                  shadow="sm"
+                  padding="lg"
+                  radius="md"
+                  withBorder
+                  maw={395}
+                  mih={350}
+                >
+                  <Stack align="center" justify="space-between" h={350}>
+                    <Group position="apart" mt="md" mb="xs">
+                      <Text weight={500} pos="relative">
+                        <LoadingOverlay visible={loading} overlayBlur={2} />
+                        {headline}
+                      </Text>
+                      <Button
+                        onClick={() => handleRefreshHeading(index)}
+                        className={classes.button}
+                        loading={loading}
+                        disabled={loading}
+                      >
+                        New headline
+                      </Button>
+                      <Badge color="green" variant="light">
+                        Live AI content
+                      </Badge>
+                    </Group>
+                    <ChannelSelectionModal
+                      opened={modals[index]?.isOpen || false}
+                      close={() => handleCloseModal(index)}
+                      content={result.marketingTexts[index] || ""}
+                      contentTitle={headline}
+                    />
+
+                    <Text size="sm" color="dimmed">
+                      {result.marketingTexts[index]}
                     </Text>
+
                     <Button
-                      onClick={() => handleRefreshHeading(index)}
-                      className={classes.button}
-                      loading={loading}
-                      disabled={loading}
+                      variant="light"
+                      color="blue"
+                      fullWidth
+                      mt="md"
+                      radius="md"
+                      onClick={() => handleOpenModal(index)}
                     >
-                      New headline
+                      Select a channel for this content
                     </Button>
-                    <Badge color="green" variant="light">
-                      Live AI content
-                    </Badge>
-                  </Group>
-
-                  <Text size="sm" color="dimmed">
-                    {result.marketingTexts[index]}
-                  </Text>
-
-                  <ChannelSelectionModal
-                    opened={modals[index]?.isOpen || false}
-                    close={() => handleCloseModal(index)}
-                    content={result.marketingTexts[index] || ""}
-                    contentTitle={headline}
-                  />
-
-                  <Button
-                    variant="light"
-                    color="blue"
-                    fullWidth
-                    mt="md"
-                    radius="md"
-                    onClick={() => handleOpenModal(index)}
-                  >
-                    Select a channel for this content
-                  </Button>
+                  </Stack>
                 </Card>
               ))}
             </Group>
