@@ -34,7 +34,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       content:
         " read the text between the dashes and convert it to a" +
         prompt.channel +
-        " post." +
+        " post with a maximum of" +
+        maxChars +
+        " characters." +
         "---" +
         prompt.content +
         "---",
