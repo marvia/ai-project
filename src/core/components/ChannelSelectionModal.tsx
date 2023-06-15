@@ -20,7 +20,7 @@ interface ChannelSelectionModalProps {
 function ChannelSelectionModal({ opened, close, content }: ChannelSelectionModalProps) {
   const { classes } = useStyles(undefined, { name: ChannelSelectionModal.name })
   const [loading, setLoading] = useState<boolean>(false)
-  const [result, setResult] = useState({})
+  const [result, setResult] = useState("")
 
   const channelSelectionForm = useForm({
     defaultValues: {
@@ -64,36 +64,43 @@ function ChannelSelectionModal({ opened, close, content }: ChannelSelectionModal
       classNames={{ body: classes.modalBody }}
       size="md"
     >
-      <form onSubmit={handleSubmit}>
-        <Stack style={{ minHeight: 300 }} justify="space-between">
-          <Controller
-            control={channelSelectionForm.control}
-            name="channel"
-            render={({ field, fieldState }) => (
-              <Select
-                {...field}
-                data={channelOptions}
-                label="Social media channel"
-                classNames={{ root: classes.root }}
-                disabled={loading}
-                error={fieldState.error && <span>{fieldState.error.message}</span>}
-              />
-            )}
-          />
+      {!result && (
+        <form onSubmit={handleSubmit}>
+          <Stack style={{ minHeight: 300 }} justify="space-between">
+            <Controller
+              control={channelSelectionForm.control}
+              name="channel"
+              render={({ field, fieldState }) => (
+                <Select
+                  {...field}
+                  data={channelOptions}
+                  label="Social media channel"
+                  classNames={{ root: classes.root }}
+                  disabled={loading}
+                  error={fieldState.error && <span>{fieldState.error.message}</span>}
+                />
+              )}
+            />
 
-          <Text>{content}</Text>
+            <Text>{content}</Text>
 
-          <Button
-            mt="md"
-            type="submit"
-            loading={loading}
-            disabled={loading}
-            className={classes.button}
-          >
-            Create content for this channel
-          </Button>
+            <Button
+              mt="md"
+              type="submit"
+              loading={loading}
+              disabled={loading}
+              className={classes.button}
+            >
+              Create content for this channel
+            </Button>
+          </Stack>
+        </form>
+      )}
+      {result && (
+        <Stack mt="md" style={{ minHeight: 300 }} justify="space-between">
+          <Text>{result}</Text>
         </Stack>
-      </form>
+      )}
     </Modal>
   )
 }
