@@ -40,8 +40,7 @@ function CopyCreator(): JSX.Element {
   const router = useRouter()
   const activeLocale = router.locale as AvailableLocale
   const t = useTranslations("copyCreator")
-  const [newHeadLine, setNewHeadLine] = useState<string>("")
-  const [initialHeadline, setInitialHeadline] = useState<string | undefined>("")
+
   const [formInput, setFormInput] = useState({
     brandIntro: "",
     toneOfVoice: "",
@@ -125,13 +124,10 @@ function CopyCreator(): JSX.Element {
         toneOfVoice: formInput.toneOfVoice,
         targetAudience: formInput.targetAudiences,
         callToAction: formInput.callToAction,
-        headline: initialHeadline,
         intro: formInput.brandIntro,
       }
 
       await axios.post(url, { prompt }).then((response) => {
-        setNewHeadLine(response.data)
-
         setResult((prevResult) => {
           const newHeadlines = [...prevResult.headlines]
           newHeadlines[index] = response.data
