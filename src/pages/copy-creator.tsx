@@ -253,7 +253,11 @@ function CopyCreator(): JSX.Element {
                     {result.marketingTexts[index]}
                   </Text>
 
-                  <ChannelSelectionModal opened={opened} close={close} />
+                  <ChannelSelectionModal
+                    opened={opened}
+                    close={close}
+                    content={result.marketingTexts[index] || ""}
+                  />
 
                   <Button variant="light" color="blue" fullWidth mt="md" radius="md" onClick={open}>
                     Select a channel for this content
