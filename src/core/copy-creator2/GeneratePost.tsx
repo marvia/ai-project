@@ -33,12 +33,12 @@ function GeneratePost({ text, image, loading }): JSX.Element {
         )}
         {count === 1 && (
           <Text size={"xl"} color="white" weight={700}>
-            Giving it precice orders...
+            Giving it precise orders...
           </Text>
         )}
         {count === 2 && (
           <Text size={"xl"} color="white" weight={700}>
-            Painstaikingly typing out an Instagram post...
+            painstakingly typing out an Instagram post...
           </Text>
         )}
         {count === 3 && (
