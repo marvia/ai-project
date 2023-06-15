@@ -272,9 +272,10 @@ function CopyCreator(): JSX.Element {
                   </Text>
 
                   <ChannelSelectionModal
-                    opened={modals[index]?.isOpen}
+                    opened={modals[index]?.isOpen || false}
                     close={() => handleCloseModal(index)}
                     content={result.marketingTexts[index] || ""}
+                    contentTitle={headline}
                   />
 
                   <Button

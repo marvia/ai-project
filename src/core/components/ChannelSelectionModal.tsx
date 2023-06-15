@@ -15,9 +15,15 @@ interface ChannelSelectionModalProps {
   opened: boolean
   close: () => void
   content: string
+  contentTitle: string
 }
 
-function ChannelSelectionModal({ opened, close, content }: ChannelSelectionModalProps) {
+function ChannelSelectionModal({
+  opened,
+  close,
+  content,
+  contentTitle,
+}: ChannelSelectionModalProps) {
   const { classes } = useStyles(undefined, { name: ChannelSelectionModal.name })
   const [loading, setLoading] = useState<boolean>(false)
   const [result, setResult] = useState({})
@@ -29,6 +35,8 @@ function ChannelSelectionModal({ opened, close, content }: ChannelSelectionModal
     },
     resolver: zodResolver(ChannelSelectorInput),
   })
+
+  console.log({ contentTitle })
 
   const handleSubmit = channelSelectionForm.handleSubmit(async (values) => {
     //TODO: send prompt to backend and create endpoint
@@ -80,7 +88,9 @@ function ChannelSelectionModal({ opened, close, content }: ChannelSelectionModal
               />
             )}
           />
-
+          <Title order={5} align="center" style={{ color: "#00386b" }}>
+            {contentTitle}
+          </Title>
           <Text>{content}</Text>
 
           <Button
