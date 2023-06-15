@@ -6,3 +6,8 @@ export const CopyCreatorInput = z.object({
   callToAction: z.string(),
   brandIntro: z.string(),
 })
+
+export const ChannelSelectorInput = z.object({
+  channel: z.string(),
+  content: z.string(),
+})

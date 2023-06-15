@@ -24,6 +24,8 @@ import { GetStaticPropsContext } from "next"
 import axios from "axios"
 import { DEFAULT_PROMPT } from "src/core/copy-creator/constants"
 import { AvailableLocale } from "src/types"
+import { useDisclosure } from "@mantine/hooks"
+import ChannelSelectionModal from "src/core/components/ChannelSelectionModal"
 
 interface CopyCreatorResponseType {
   headlines: Array<string>
@@ -40,6 +42,7 @@ function CopyCreator(): JSX.Element {
   const router = useRouter()
   const activeLocale = router.locale as AvailableLocale
   const t = useTranslations("copyCreator")
+  const [opened, { open, close }] = useDisclosure(false)
 
   const [formInput, setFormInput] = useState({
     brandIntro: "",
@@ -250,8 +253,10 @@ function CopyCreator(): JSX.Element {
                     {result.marketingTexts[index]}
                   </Text>
 
-                  <Button variant="light" color="blue" fullWidth mt="md" radius="md">
-                    Select this article
+                  <ChannelSelectionModal opened={opened} close={close} />
+
+                  <Button variant="light" color="blue" fullWidth mt="md" radius="md" onClick={open}>
+                    Select a channel for this content
                   </Button>
                 </Card>
               ))}
