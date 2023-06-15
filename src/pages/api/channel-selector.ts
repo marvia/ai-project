@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 import openai from "../../core/utils/openai"
+import { useState } from "react"
 
 type Data = {
   name: string
@@ -7,6 +8,20 @@ type Data = {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
   const { prompt } = req.body
+
+  let maxChars = 0
+
+  if (prompt.channel === "Instagram") {
+    maxChars = 2200
+  }
+
+  if (prompt.channel === "Facebook") {
+    maxChars = 2200
+  }
+
+  if (prompt.channel === "Twitter") {
+    maxChars = 280
+  }
 
   const messages = [
     {
@@ -27,7 +42,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
     {
       role: "user",
-      content: "Start directly with the first sentence of the post. And add camelCase hashtags.",
+      content:
+        "Start directly with the first sentence of the post. And add camelCase hashtags. dont use more than" +
+        maxChars +
+        " characters",
     },
   ]
   const completion = await openai
