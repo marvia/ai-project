@@ -11,17 +11,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
   let maxChars = 0
 
-  if (prompt.channel === "Instagram") {
+  if (prompt.channel === "instagram") {
     maxChars = 2200
   }
 
-  if (prompt.channel === "Facebook") {
+  if (prompt.channel === "facebook") {
     maxChars = 2200
   }
 
-  if (prompt.channel === "Twitter") {
+  if (prompt.channel === "twitter") {
     maxChars = 280
   }
+
+  console.log("maxChars", maxChars)
+  console.log("prompt", prompt)
 
   const messages = [
     {
