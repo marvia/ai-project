@@ -14,7 +14,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     {
       role: "system",
       content:
-        "You are a marketeer who knows how to talk to " +
+        "You are a brand marketeer who knows how to talk to " +
         prompt.targetAudience +
         " in an " +
         prompt.toneOfVoice +
