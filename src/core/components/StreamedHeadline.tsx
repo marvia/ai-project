@@ -1,13 +1,4 @@
-import {
-  Badge,
-  Button,
-  Card,
-  Group,
-  LoadingOverlay,
-  Stack,
-  Text,
-  createStyles,
-} from "@mantine/core"
+import { Button, Card, Group, LoadingOverlay, Stack, Text, createStyles } from "@mantine/core"
 import { useDisclosure } from "@mantine/hooks"
 import { useCompletion } from "ai/react"
 import { useState } from "react"
@@ -60,9 +51,19 @@ export const StreamedHeadline = ({ headline, index, marketingText }) => {
   }
 
   return (
-    <Card key={1} shadow="sm" padding="lg" radius="md" withBorder maw={395} mih={350}>
-      <Stack align="center" justify="space-between" h={400}>
-        <Card mih={100}>
+    <Card key={1} shadow="sm" padding="lg" radius="md" withBorder maw={395} mih={500}>
+      <Stack align="center" justify="space-around" h={400}>
+        <Button
+          onClick={handleStreamHeadline}
+          className={classes.button}
+          loading={loading}
+          disabled={loading}
+          mah={20}
+          mih={20}
+        >
+          New headline
+        </Button>
+        <Card>
           {firstRenderHeadline ? (
             <Text weight={500} pos="relative">
               <LoadingOverlay visible={loading} overlayBlur={2} /> {headline}
@@ -73,19 +74,7 @@ export const StreamedHeadline = ({ headline, index, marketingText }) => {
             </Text>
           )}
         </Card>
-        <Group position="apart" mt="md" mb="xs">
-          <Button
-            onClick={handleStreamHeadline}
-            className={classes.button}
-            loading={loading}
-            disabled={loading}
-          >
-            New headline
-          </Button>
-          <Badge color="green" variant="light">
-            Live AI content
-          </Badge>
-        </Group>
+        <Group position="apart" mt="md" mb="xs"></Group>
         <ChannelSelectionModal
           opened={modals[0]?.isOpen || false}
           close={() => handleCloseModal(index)}
