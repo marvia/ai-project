@@ -1,14 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import {
-  Badge,
   Button,
   Card,
   Group,
-  LoadingOverlay,
   Select,
   SelectItem,
   Stack,
-  Text,
   Textarea,
   Title,
   createStyles,
@@ -22,7 +19,7 @@ import { useRouter } from "next/router"
 import { useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import toast from "react-hot-toast"
-import ChannelSelectionModal from "src/core/components/ChannelSelectionModal"
+import { StreamedHeadline } from "src/core/components/StreamedHeadline"
 import { BRAND_INTRO, TARGET_AUDIENCES, TONE_OF_VOICE } from "src/core/copy-creator/constants"
 import { CopyCreatorInput } from "src/core/copy-creator/zod"
 import Layout from "src/core/layouts/Layout"
@@ -247,141 +244,14 @@ function CopyCreator(): JSX.Element {
 
         {result.headlines.length > 1 && (
           <Group>
-            <Card key={1} shadow="sm" padding="lg" radius="md" withBorder maw={395} mih={350}>
-              <Stack align="center" justify="space-between" h={400}>
-                <Card mih={100}>
-                  {firstRenderHeadline ? (
-                    <Text weight={500} pos="relative">
-                      <LoadingOverlay visible={loading} overlayBlur={2} /> {result.headlines[0]}
-                    </Text>
-                  ) : (
-                    <Text weight={500} pos="relative">
-                      {completion}
-                    </Text>
-                  )}
-                </Card>
-                <Group position="apart" mt="md" mb="xs">
-                  <Button
-                    onClick={handleStreamHeadline}
-                    className={classes.button}
-                    loading={loading}
-                    disabled={loading}
-                  >
-                    New headline
-                  </Button>
-                  <Badge color="green" variant="light">
-                    Live AI content
-                  </Badge>
-                </Group>
-                <ChannelSelectionModal
-                  opened={modals[0]?.isOpen || false}
-                  close={() => handleCloseModal(0)}
-                  content={result.marketingTexts[0] || ""}
-                  contentTitle={result.headlines[0] || ""}
-                />
-
-                <Text size="sm" color="dimmed">
-                  {result.marketingTexts[0]}
-                </Text>
-
-                <Button
-                  variant="light"
-                  color="blue"
-                  fullWidth
-                  mt="md"
-                  radius="md"
-                  onClick={() => handleOpenModal(0)}
-                >
-                  Select a channel for this content
-                </Button>
-              </Stack>
-            </Card>
-
-            <Card key={0} shadow="sm" padding="lg" radius="md" withBorder maw={395} mih={350}>
-              <Stack align="center" justify="space-between" h={400}>
-                <Group position="apart" mt="md" mb="xs">
-                  <Text weight={500} pos="relative">
-                    <LoadingOverlay visible={loading} overlayBlur={2} /> {result.headlines[1]}
-                  </Text>
-
-                  <Button
-                    onClick={() => handleStreamHeadline(0)}
-                    className={classes.button}
-                    loading={loading}
-                    disabled={loading}
-                  >
-                    New headline
-                  </Button>
-                  <Badge color="green" variant="light">
-                    Live AI content
-                  </Badge>
-                </Group>
-                <ChannelSelectionModal
-                  opened={modals[1]?.isOpen || false}
-                  close={() => handleCloseModal(1)}
-                  content={result.marketingTexts[1] || ""}
-                  contentTitle={result.headlines[1] || ""}
-                />
-
-                <Text size="sm" color="dimmed">
-                  {result.marketingTexts[1]}
-                </Text>
-
-                <Button
-                  variant="light"
-                  color="blue"
-                  fullWidth
-                  mt="md"
-                  radius="md"
-                  onClick={() => handleOpenModal(1)}
-                >
-                  Select a channel for this content
-                </Button>
-              </Stack>
-            </Card>
-
-            <Card key={2} shadow="sm" padding="lg" radius="md" withBorder maw={395} mih={350}>
-              <Stack align="center" justify="space-between" h={400}>
-                <Group position="apart" mt="md" mb="xs">
-                  <Text weight={500} pos="relative">
-                    <LoadingOverlay visible={loading} overlayBlur={2} /> {result.headlines[2]}
-                  </Text>
-
-                  <Button
-                    onClick={() => handleStreamHeadline}
-                    className={classes.button}
-                    loading={loading}
-                    disabled={loading}
-                  >
-                    New headline
-                  </Button>
-                  <Badge color="green" variant="light">
-                    Live AI content
-                  </Badge>
-                </Group>
-                <ChannelSelectionModal
-                  opened={modals[2]?.isOpen || false}
-                  close={() => handleCloseModal(2)}
-                  content={result.marketingTexts[2] || ""}
-                  contentTitle={result.headlines[2] || ""}
-                />
-
-                <Text size="sm" color="dimmed">
-                  {result.marketingTexts[2]}
-                </Text>
-
-                <Button
-                  variant="light"
-                  color="blue"
-                  fullWidth
-                  mt="md"
-                  radius="md"
-                  onClick={() => handleOpenModal(2)}
-                >
-                  Select a channel for this content
-                </Button>
-              </Stack>
-            </Card>
+            {result.headlines.map((headline, index) => (
+              <StreamedHeadline
+                key={index}
+                headline={result.headlines[index]}
+                marketingText={result.marketingTexts[index]}
+                index={index}
+              />
+            ))}
           </Group>
         )}
       </Stack>
