@@ -249,19 +249,18 @@ function CopyCreator(): JSX.Element {
           <Group>
             <Card key={1} shadow="sm" padding="lg" radius="md" withBorder maw={395} mih={350}>
               <Stack align="center" justify="space-between" h={400}>
+                <Card mih={100}>
+                  {firstRenderHeadline ? (
+                    <Text weight={500} pos="relative">
+                      <LoadingOverlay visible={loading} overlayBlur={2} /> {result.headlines[0]}
+                    </Text>
+                  ) : (
+                    <Text weight={500} pos="relative">
+                      {completion}
+                    </Text>
+                  )}
+                </Card>
                 <Group position="apart" mt="md" mb="xs">
-                  <Card>
-                    {firstRenderHeadline ? (
-                      <Text weight={500} pos="relative">
-                        <LoadingOverlay visible={loading} overlayBlur={2} /> {result.headlines[0]}
-                      </Text>
-                    ) : (
-                      <Text weight={500} pos="relative">
-                        {completion}
-                      </Text>
-                    )}
-                  </Card>
-
                   <Button
                     onClick={handleStreamHeadline}
                     className={classes.button}
