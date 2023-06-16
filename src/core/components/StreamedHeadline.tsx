@@ -4,6 +4,7 @@ import {
   Card,
   Group,
   LoadingOverlay,
+  ScrollArea,
   Stack,
   Text,
   createStyles,
@@ -60,7 +61,7 @@ export const StreamedHeadline = ({ headline, index, marketingText }) => {
   }
 
   return (
-    <Card key={1} shadow="sm" padding="lg" radius="md" withBorder maw={395} mih={350}>
+    <Card key={index} shadow="sm" padding="lg" radius="md" withBorder maw={395} mih={350}>
       <Stack align="center" justify="space-between" h={400}>
         <Card mih={100}>
           {firstRenderHeadline ? (
@@ -73,7 +74,7 @@ export const StreamedHeadline = ({ headline, index, marketingText }) => {
             </Text>
           )}
         </Card>
-        <Group position="apart" mt="md" mb="xs">
+        <Group position="apart" mb="xs">
           <Button
             onClick={handleStreamHeadline}
             className={classes.button}
@@ -87,15 +88,16 @@ export const StreamedHeadline = ({ headline, index, marketingText }) => {
           </Badge>
         </Group>
         <ChannelSelectionModal
-          opened={modals[0]?.isOpen || false}
+          opened={modals[index]?.isOpen || false}
           close={() => handleCloseModal(index)}
           content={marketingText || ""}
           contentTitle={headline || ""}
         />
-
-        <Text size="sm" color="dimmed">
-          {marketingText}
-        </Text>
+        <ScrollArea>
+          <Text size="sm" color="dimmed">
+            {marketingText}
+          </Text>
+        </ScrollArea>
 
         <Button
           variant="light"
