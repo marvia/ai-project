@@ -1,4 +1,13 @@
-import { Button, Card, Group, LoadingOverlay, Stack, Text, createStyles } from "@mantine/core"
+import {
+  Button,
+  Card,
+  Group,
+  LoadingOverlay,
+  ScrollArea,
+  Stack,
+  Text,
+  createStyles,
+} from "@mantine/core"
 import { useDisclosure } from "@mantine/hooks"
 import { useCompletion } from "ai/react"
 import { useState } from "react"
@@ -51,7 +60,7 @@ export const StreamedHeadline = ({ headline, index, marketingText }) => {
   }
 
   return (
-    <Card key={1} shadow="sm" padding="lg" radius="md" withBorder maw={395} mih={500}>
+    <Card key={index} shadow="sm" padding="lg" radius="md" withBorder maw={395} mih={500}>
       <Stack align="center" justify="space-around" h={400}>
         <Button
           onClick={handleStreamHeadline}
@@ -74,17 +83,18 @@ export const StreamedHeadline = ({ headline, index, marketingText }) => {
             </Text>
           )}
         </Card>
-        <Group position="apart" mt="md" mb="xs"></Group>
+        <Group position="apart" mb="xs"></Group>
         <ChannelSelectionModal
-          opened={modals[0]?.isOpen || false}
+          opened={modals[index]?.isOpen || false}
           close={() => handleCloseModal(index)}
           content={marketingText || ""}
           contentTitle={headline || ""}
         />
-
-        <Text size="sm" color="dimmed">
-          {marketingText}
-        </Text>
+        <ScrollArea>
+          <Text size="sm" color="dimmed">
+            {marketingText}
+          </Text>
+        </ScrollArea>
 
         <Button
           variant="light"

@@ -41,7 +41,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   const completion = await openai
     .createChatCompletion({
       model: "gpt-3.5-turbo",
-      messages: messages,
+      messages,
       temperature: 0.9,
       max_tokens: 1000,
     })
@@ -50,5 +50,4 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     })
 
   res.send(completion?.data.choices[0].message.content)
-  // receive some user data, ask chat gpt to generate something and return to the user
 }
