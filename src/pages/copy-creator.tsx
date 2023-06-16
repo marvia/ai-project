@@ -248,62 +248,52 @@ function CopyCreator(): JSX.Element {
           </Card>
         </form>
         {result.headlines?.length > 1 && (
-          <Card shadow="sm" style={{ width: 1250, minHeight: 300 }} pb={"xl"}>
-            <Group>
-              {result.headlines.map((headline, index) => (
-                <Card
-                  key={index}
-                  shadow="sm"
-                  padding="lg"
-                  radius="md"
-                  withBorder
-                  maw={395}
-                  mih={350}
-                >
-                  <Stack align="center" justify="space-between" h={350}>
-                    <Group position="apart" mt="md" mb="xs">
-                      <Text weight={500} pos="relative">
-                        <LoadingOverlay visible={loading} overlayBlur={2} />
-                        {headline}
-                      </Text>
-                      <Button
-                        onClick={() => handleRefreshHeading(index)}
-                        className={classes.button}
-                        loading={loading}
-                        disabled={loading}
-                      >
-                        New headline
-                      </Button>
-                      <Badge color="green" variant="light">
-                        Live AI content
-                      </Badge>
-                    </Group>
-                    <ChannelSelectionModal
-                      opened={modals[index]?.isOpen || false}
-                      close={() => handleCloseModal(index)}
-                      content={result.marketingTexts[index] || ""}
-                      contentTitle={headline}
-                    />
-
-                    <Text size="sm" color="dimmed">
-                      {result.marketingTexts[index]}
+          <Group>
+            {result.headlines.map((headline, index) => (
+              <Card key={index} shadow="sm" padding="lg" radius="md" withBorder maw={395} mih={350}>
+                <Stack align="center" justify="space-between" h={400}>
+                  <Group position="apart" mt="md" mb="xs">
+                    <Text weight={500} pos="relative">
+                      <LoadingOverlay visible={loading} overlayBlur={2} />
+                      {headline}
                     </Text>
-
                     <Button
-                      variant="light"
-                      color="blue"
-                      fullWidth
-                      mt="md"
-                      radius="md"
-                      onClick={() => handleOpenModal(index)}
+                      onClick={() => handleRefreshHeading(index)}
+                      className={classes.button}
+                      loading={loading}
+                      disabled={loading}
                     >
-                      Select a channel for this content
+                      New headline
                     </Button>
-                  </Stack>
-                </Card>
-              ))}
-            </Group>
-          </Card>
+                    <Badge color="green" variant="light">
+                      Live AI content
+                    </Badge>
+                  </Group>
+                  <ChannelSelectionModal
+                    opened={modals[index]?.isOpen || false}
+                    close={() => handleCloseModal(index)}
+                    content={result.marketingTexts[index] || ""}
+                    contentTitle={headline}
+                  />
+
+                  <Text size="sm" color="dimmed">
+                    {result.marketingTexts[index]}
+                  </Text>
+
+                  <Button
+                    variant="light"
+                    color="blue"
+                    fullWidth
+                    mt="md"
+                    radius="md"
+                    onClick={() => handleOpenModal(index)}
+                  >
+                    Select a channel for this content
+                  </Button>
+                </Stack>
+              </Card>
+            ))}
+          </Group>
         )}
       </Stack>
     </Layout>
