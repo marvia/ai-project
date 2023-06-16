@@ -13,19 +13,21 @@ import {
   Title,
   createStyles,
 } from "@mantine/core"
+import { useDisclosure } from "@mantine/hooks"
+import { useCompletion } from "ai/react"
+import axios from "axios"
+import { GetStaticPropsContext } from "next"
+import { useTranslations } from "next-intl"
 import { useRouter } from "next/router"
 import { useState } from "react"
 import { Controller, useForm } from "react-hook-form"
+import toast from "react-hot-toast"
+import ChannelSelectionModal from "src/core/components/ChannelSelectionModal"
 import { BRAND_INTRO, TARGET_AUDIENCES, TONE_OF_VOICE } from "src/core/copy-creator/constants"
 import { CopyCreatorInput } from "src/core/copy-creator/zod"
 import Layout from "src/core/layouts/Layout"
-import { useTranslations } from "next-intl"
-import { GetStaticPropsContext } from "next"
-import axios from "axios"
-import { DEFAULT_PROMPT } from "src/core/copy-creator/constants"
 import { AvailableLocale } from "src/types"
-import { useDisclosure } from "@mantine/hooks"
-import ChannelSelectionModal from "src/core/components/ChannelSelectionModal"
+;("use client")
 
 interface CopyCreatorResponseType {
   headlines: Array<string>
@@ -42,11 +44,27 @@ function CopyCreator(): JSX.Element {
   const router = useRouter()
   const activeLocale = router.locale as AvailableLocale
   const t = useTranslations("copyCreator")
+  const [firstRenderHeadline, setFirstRenderHeadline] = useState(true)
   const [modals, setModals] = useState([
     { id: 0, isOpen: false, disclosure: useDisclosure(false) },
     { id: 1, isOpen: false, disclosure: useDisclosure(false) },
     { id: 2, isOpen: false, disclosure: useDisclosure(false) },
   ])
+
+  const { complete, completion, isLoading } = useCompletion({
+    api: "/api/completion",
+    onResponse: (res) => {
+      // trigger something when the response starts streaming in
+      // e.g. if the user is rate limited, you can show a toast
+      if (res.status === 429) {
+        toast.error("You are being rate limited. Please try again later.")
+      }
+    },
+    onFinish: () => {
+      // do something with the completion result
+      toast.success("Successfully generated completion!")
+    },
+  })
 
   const [formInput, setFormInput] = useState({
     brandIntro: "",
@@ -137,30 +155,9 @@ function CopyCreator(): JSX.Element {
     value: item.en,
   }))
 
-  async function handleRefreshHeading(index) {
-    setLoading(true)
-    try {
-      const url = "/api/hello"
-      const prompt = {
-        toneOfVoice: formInput.toneOfVoice,
-        targetAudience: formInput.targetAudiences,
-        callToAction: formInput.callToAction,
-        intro: formInput.brandIntro,
-      }
-
-      await axios.post(url, { prompt }).then((response) => {
-        setResult((prevResult) => {
-          const newHeadlines = [...prevResult.headlines]
-          newHeadlines[index] = response.data
-          return { ...prevResult, headlines: newHeadlines }
-        })
-      })
-    } catch (error) {
-      console.error(error.message)
-      throw new Error("FAAAAIIL")
-    } finally {
-      setLoading(false)
-    }
+  const handleStreamHeadline = async (index) => {
+    setFirstRenderHeadline(false)
+    await complete(result.headlines[index] || "")
   }
 
   return (
@@ -247,52 +244,145 @@ function CopyCreator(): JSX.Element {
             </Stack>
           </Card>
         </form>
-        {result.headlines?.length > 1 && (
-          <Group>
-            {result.headlines.map((headline, index) => (
-              <Card key={index} shadow="sm" padding="lg" radius="md" withBorder maw={395} mih={350}>
-                <Stack align="center" justify="space-between" h={400}>
-                  <Group position="apart" mt="md" mb="xs">
-                    <Text weight={500} pos="relative">
-                      <LoadingOverlay visible={loading} overlayBlur={2} />
-                      {headline}
-                    </Text>
-                    <Button
-                      onClick={() => handleRefreshHeading(index)}
-                      className={classes.button}
-                      loading={loading}
-                      disabled={loading}
-                    >
-                      New headline
-                    </Button>
-                    <Badge color="green" variant="light">
-                      Live AI content
-                    </Badge>
-                  </Group>
-                  <ChannelSelectionModal
-                    opened={modals[index]?.isOpen || false}
-                    close={() => handleCloseModal(index)}
-                    content={result.marketingTexts[index] || ""}
-                    contentTitle={headline}
-                  />
 
-                  <Text size="sm" color="dimmed">
-                    {result.marketingTexts[index]}
+        {result.headlines.length > 1 && (
+          <Group>
+            <Card key={1} shadow="sm" padding="lg" radius="md" withBorder maw={395} mih={350}>
+              <Stack align="center" justify="space-between" h={400}>
+                <Group position="apart" mt="md" mb="xs">
+                  <Card>
+                    {firstRenderHeadline ? (
+                      <Text weight={500} pos="relative">
+                        <LoadingOverlay visible={loading} overlayBlur={2} /> {result.headlines[0]}
+                      </Text>
+                    ) : (
+                      <Text weight={500} pos="relative">
+                        {completion}
+                      </Text>
+                    )}
+                  </Card>
+
+                  <Button
+                    onClick={handleStreamHeadline}
+                    className={classes.button}
+                    loading={loading}
+                    disabled={loading}
+                  >
+                    New headline
+                  </Button>
+                  <Badge color="green" variant="light">
+                    Live AI content
+                  </Badge>
+                </Group>
+                <ChannelSelectionModal
+                  opened={modals[0]?.isOpen || false}
+                  close={() => handleCloseModal(0)}
+                  content={result.marketingTexts[0] || ""}
+                  contentTitle={result.headlines[0] || ""}
+                />
+
+                <Text size="sm" color="dimmed">
+                  {result.marketingTexts[0]}
+                </Text>
+
+                <Button
+                  variant="light"
+                  color="blue"
+                  fullWidth
+                  mt="md"
+                  radius="md"
+                  onClick={() => handleOpenModal(0)}
+                >
+                  Select a channel for this content
+                </Button>
+              </Stack>
+            </Card>
+
+            <Card key={0} shadow="sm" padding="lg" radius="md" withBorder maw={395} mih={350}>
+              <Stack align="center" justify="space-between" h={400}>
+                <Group position="apart" mt="md" mb="xs">
+                  <Text weight={500} pos="relative">
+                    <LoadingOverlay visible={loading} overlayBlur={2} /> {result.headlines[1]}
                   </Text>
 
                   <Button
-                    variant="light"
-                    color="blue"
-                    fullWidth
-                    mt="md"
-                    radius="md"
-                    onClick={() => handleOpenModal(index)}
+                    onClick={() => handleStreamHeadline(0)}
+                    className={classes.button}
+                    loading={loading}
+                    disabled={loading}
                   >
-                    Select a channel for this content
+                    New headline
                   </Button>
-                </Stack>
-              </Card>
-            ))}
+                  <Badge color="green" variant="light">
+                    Live AI content
+                  </Badge>
+                </Group>
+                <ChannelSelectionModal
+                  opened={modals[1]?.isOpen || false}
+                  close={() => handleCloseModal(1)}
+                  content={result.marketingTexts[1] || ""}
+                  contentTitle={result.headlines[1] || ""}
+                />
+
+                <Text size="sm" color="dimmed">
+                  {result.marketingTexts[1]}
+                </Text>
+
+                <Button
+                  variant="light"
+                  color="blue"
+                  fullWidth
+                  mt="md"
+                  radius="md"
+                  onClick={() => handleOpenModal(1)}
+                >
+                  Select a channel for this content
+                </Button>
+              </Stack>
+            </Card>
+
+            <Card key={2} shadow="sm" padding="lg" radius="md" withBorder maw={395} mih={350}>
+              <Stack align="center" justify="space-between" h={400}>
+                <Group position="apart" mt="md" mb="xs">
+                  <Text weight={500} pos="relative">
+                    <LoadingOverlay visible={loading} overlayBlur={2} /> {result.headlines[2]}
+                  </Text>
+
+                  <Button
+                    onClick={() => handleStreamHeadline}
+                    className={classes.button}
+                    loading={loading}
+                    disabled={loading}
+                  >
+                    New headline
+                  </Button>
+                  <Badge color="green" variant="light">
+                    Live AI content
+                  </Badge>
+                </Group>
+                <ChannelSelectionModal
+                  opened={modals[2]?.isOpen || false}
+                  close={() => handleCloseModal(2)}
+                  content={result.marketingTexts[2] || ""}
+                  contentTitle={result.headlines[2] || ""}
+                />
+
+                <Text size="sm" color="dimmed">
+                  {result.marketingTexts[2]}
+                </Text>
+
+                <Button
+                  variant="light"
+                  color="blue"
+                  fullWidth
+                  mt="md"
+                  radius="md"
+                  onClick={() => handleOpenModal(2)}
+                >
+                  Select a channel for this content
+                </Button>
+              </Stack>
+            </Card>
           </Group>
         )}
       </Stack>
