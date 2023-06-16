@@ -60,8 +60,8 @@ export const StreamedHeadline = ({ headline, index, marketingText }) => {
   }
 
   return (
-    <Card key={index} shadow="sm" padding="lg" radius="md" withBorder maw={395} mih={500}>
-      <Stack align="center" justify="space-around" h={400}>
+    <Card key={index} shadow="sm" padding="lg" radius="md" withBorder maw={395} mih={400}>
+      <Stack align="center" justify="space-between" h={400}>
         <Button
           onClick={handleStreamHeadline}
           className={classes.button}
